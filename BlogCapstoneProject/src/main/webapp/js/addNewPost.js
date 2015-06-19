@@ -11,6 +11,7 @@ function loadCategories() {
     }).success(function (data, status) {
        
     });    
+    var randomVar;
 }
 
 function loadTheCats() {
