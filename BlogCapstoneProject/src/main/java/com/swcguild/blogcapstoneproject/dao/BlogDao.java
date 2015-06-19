@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class BlogDao implements BlogPostDaoInterface {
 
-    private final String SQL_INSERT_POST = "INSERT INTO posts (post_user_id, post_type, post_title, post_content, post_date, post_tags, post_categories) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private final String SQL_INSERT_POST = "INSERT INTO posts (post_user_id, post_type, post_title, post_content, post_date) "
+            + "VALUES (?, ?, ?, ?, ?)";
 
     private final String SQL_DELETE_POST = "DELETE FROM posts WHERE post_id = ?";
 
@@ -57,9 +57,8 @@ public class BlogDao implements BlogPostDaoInterface {
                 post.getPostType(),
                 post.getPostTitle(),
                 post.getPostContent(),
-                post.getPostDate(),
-                post.getPostTags(),
-                post.getPostCategories());
+                post.getPostDate()
+        );
 
         post.setPostId(jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class));
     }
@@ -150,8 +149,6 @@ public class BlogDao implements BlogPostDaoInterface {
             post.setPostTitle(rs.getString("post_title"));
             post.setPostContent(rs.getString("post_content"));
             post.setPostDate(postDate);
-            post.setPostTags(rs.getString("post_tags"));
-            post.setPostCategories(rs.getString("post_categories"));
 
             return post;
         }

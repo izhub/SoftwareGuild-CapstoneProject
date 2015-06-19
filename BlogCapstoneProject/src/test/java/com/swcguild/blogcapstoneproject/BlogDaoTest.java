@@ -63,12 +63,11 @@ public class BlogDaoTest {
         //create new post
         Post ps = new Post();
         ps.setPostTitle("The world of coding");
-        ps.setPostCategories("coding");
-
+//        ps.setPostCategories("coding");
+        ps.setPostUserId(1);
         Calendar postDate = GregorianCalendar.getInstance();
         ps.setPostDate(postDate.getTime());
-
-        ps.setPostTags("java");
+//        ps.setPostTags("java");
         ps.setPostType("post");
         ps.setPostContent("The world of coding is dark and gloomy");
 
@@ -103,12 +102,12 @@ public class BlogDaoTest {
         //create new post
         Post ps = new Post();
         ps.setPostTitle("The world of coding");
-        ps.setPostCategories("coding");
-
+//        ps.setPostCategories("coding");
+        ps.setPostUserId(1);
         Calendar postDate = GregorianCalendar.getInstance();
         ps.setPostDate(postDate.getTime());
 
-        ps.setPostTags("java");
+//        ps.setPostTags("java");
         ps.setPostType("post");
         ps.setPostContent("The world of coding is dark and gloomy");
 
