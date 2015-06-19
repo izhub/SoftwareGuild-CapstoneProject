@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.swcguild.blogcapstoneproject.BlogDaoTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.879 sec <<< FAILURE!
-addGetDeleteComment(com.swcguild.blogcapstoneproject.BlogDaoTest)  Time elapsed: 0.066 sec  <<< ERROR!
+Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.837 sec <<< FAILURE!
+addGetDeleteComment(com.swcguild.blogcapstoneproject.BlogDaoTest)  Time elapsed: 0.059 sec  <<< ERROR!
 java.lang.UnsupportedOperationException: Not supported yet.
 	at com.swcguild.blogcapstoneproject.dao.BlogDao.addPost(BlogDao.java:31)
 	at com.swcguild.blogcapstoneproject.BlogDaoTest.addGetDeleteComment(BlogDaoTest.java:69)
@@ -40,7 +40,7 @@ java.lang.UnsupportedOperationException: Not supported yet.
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
 
-addGetDeletePost(com.swcguild.blogcapstoneproject.BlogDaoTest)  Time elapsed: 0.055 sec  <<< ERROR!
+addGetDeletePost(com.swcguild.blogcapstoneproject.BlogDaoTest)  Time elapsed: 0.043 sec  <<< ERROR!
 java.lang.UnsupportedOperationException: Not supported yet.
 	at com.swcguild.blogcapstoneproject.dao.BlogDao.addPost(BlogDao.java:31)
 	at com.swcguild.blogcapstoneproject.BlogDaoTest.addGetDeletePost(BlogDaoTest.java:103)
