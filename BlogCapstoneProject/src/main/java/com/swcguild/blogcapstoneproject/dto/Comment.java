@@ -5,6 +5,7 @@
  */
 package com.swcguild.blogcapstoneproject.dto;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,13 +18,13 @@ public class Comment {
     private int userId;
     private String commentContent;
     private String commentAuthorName;
-    private String commentDate;
+    private Date commentDate;
 
-    public String getCommentDate() {
+    public Date getCommentDate() {
         return commentDate;
     }
 
-    public void setCommentDate(String commentDate) {
+    public void setCommentDate(Date commentDate) {
         this.commentDate = commentDate;
     }
     

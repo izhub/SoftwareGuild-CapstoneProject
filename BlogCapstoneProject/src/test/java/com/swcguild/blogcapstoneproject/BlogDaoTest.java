@@ -5,9 +5,12 @@
  */
 package com.swcguild.blogcapstoneproject;
 
-import com.swcguild.blogcapstoneproject.dao.BlogDao;
+import com.swcguild.blogcapstoneproject.dao.BlogPostDaoInterface;
 import com.swcguild.blogcapstoneproject.dto.Comment;
 import com.swcguild.blogcapstoneproject.dto.Post;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,7 +28,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class BlogDaoTest {
 
-    private BlogDao dao;
+    private BlogPostDaoInterface dao;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public BlogDaoTest() {
     }
@@ -44,7 +48,7 @@ public class BlogDaoTest {
 
         //Ask spring for my Dao
         ApplicationContext ctx = new ClassPathXmlApplicationContext("test-applicationContext.xml");
-        dao = (BlogDao) ctx.getBean("blogSiteDao");
+        dao = (BlogPostDaoInterface) ctx.getBean("blogSiteDao");
 
         //Grab JdbcTemplate to use for cleaning up
         JdbcTemplate cleaner = (JdbcTemplate) ctx.getBean("jdbcTemplate");
@@ -57,35 +61,41 @@ public class BlogDaoTest {
     @Test
     public void addGetDeleteComment() {
         //create new post
-         Post ps = new Post();
+        Post ps = new Post();
         ps.setPostTitle("The world of coding");
         ps.setPostCategories("coding");
-        ps.setPostDate("06/25/2015");
+
+        Calendar postDate = GregorianCalendar.getInstance();
+        ps.setPostDate(postDate.getTime());
+
         ps.setPostTags("java");
         ps.setPostType("post");
         ps.setPostContent("The world of coding is dark and gloomy");
 
         //add post
         dao.addPost(ps);
-        
+
         //create new comment
         Comment comment = new Comment();
         comment.setCommentAuthorName("Bill");
-        comment.setCommentDate("06/05/2015");
+        
+        Calendar commentDate = GregorianCalendar.getInstance();
+        comment.setCommentDate(commentDate.getTime());
+        
         comment.setCommentContent("what's up with this site?");
+        comment.setPostId(ps.getPostId());
 
         //add comment
-        dao.addComment(comment, ps.getPostId());
+        dao.addComment(comment);
 
         //get comment
         Comment fromDb = dao.getComment(comment.getCommentId());
-//        assertEquals(fromDb.getCommentAuthorName(),comment.getCommentAuthorName());
-//        assertEquals(fromDb.getCommentDate(), comment.getCommentDate());
-//        assertEquals(fromDb.getCommentContent(), comment.getCommentContent());
-        
+        assertEquals(fromDb.getCommentAuthorName(), comment.getCommentAuthorName());
+        assertEquals(fromDb.getCommentContent(), comment.getCommentContent());
+
         //delete comment
         dao.deleteComment(comment.getCommentId());
-//        assertNull(dao.getComment(comment.getCommentId()));
+        assertNull(dao.getComment(comment.getCommentId()));
     }
 
     @Test
@@ -94,7 +104,10 @@ public class BlogDaoTest {
         Post ps = new Post();
         ps.setPostTitle("The world of coding");
         ps.setPostCategories("coding");
-        ps.setPostDate("06/25/2015");
+
+        Calendar postDate = GregorianCalendar.getInstance();
+        ps.setPostDate(postDate.getTime());
+
         ps.setPostTags("java");
         ps.setPostType("post");
         ps.setPostContent("The world of coding is dark and gloomy");
@@ -104,26 +117,25 @@ public class BlogDaoTest {
 
         //get post
         Post fromDb = dao.getPost(ps.getPostId());
-//        assertEquals(fromDb.getPostDate(), ps.getPostDate());
-//        assertEquals(fromDb.getPostId(), ps.getPostId());
-//        assertEquals(fromDb.getPostTitle(), ps.getPostTitle());
+
+        assertEquals(fromDb.getPostId(), ps.getPostId());
+        assertEquals(fromDb.getPostTitle(), ps.getPostTitle());
 
         //delete post
         dao.deletePost(ps.getPostId());
-//        assertNull(dao.getPost(ps.getPostId()));
+        assertNull(dao.getPost(ps.getPostId()));
 
     }
 
-    @Test
-    public void updateComment() {
-
-    }
-
-    @Test
-    public void updatePost() {
-
-    }
-
+//    @Test
+//    public void updateComment() {
+//
+//    }
+//
+//    @Test
+//    public void updatePost() {
+//
+//    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //

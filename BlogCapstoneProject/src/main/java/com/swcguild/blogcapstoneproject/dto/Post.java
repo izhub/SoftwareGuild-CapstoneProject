@@ -5,6 +5,7 @@
  */
 package com.swcguild.blogcapstoneproject.dto;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,7 +18,7 @@ public class Post {
     private String postType;
     private String postTitle;
     private String postContent;
-    private String postDate;
+    private Date postDate;
     private String postTags;
     private String postCategories;
 
@@ -61,11 +62,11 @@ public class Post {
         this.postContent = postContent;
     }
 
-    public String getPostDate() {
+    public Date getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(String postDate) {
+    public void setPostDate(Date postDate) {
         this.postDate = postDate;
     }
 
