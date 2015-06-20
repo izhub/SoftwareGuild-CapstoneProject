@@ -21,17 +21,20 @@
                 font-weight: bold;
             }
             h3 {
-                margin-top: 60px;
+                margin-top: 20px;
                 font-family: "Times New Roman", "Times", serif;
                 font-weight: bold;
             }
             #posts-table {
-                margin-top:40px;
+                margin-top:20px;
                 margin-bottom: 130px;
             }
             #admin-view-box {
-                border: 5px solid gray;
+                border: 2px solid gray;
                 background-color: white;
+                margin-bottom: 50px;
+                padding: 10px;
+                border-radius: 10px;
             }
             body {
                 background-color: lightsteelblue;
@@ -42,17 +45,22 @@
         <div class="container-fluid">
             <h1>Admin Portal</h1>
             <hr/>
-            <div class ="col-sm-2">               
+            <div class ="col-sm-2">
                 <ul id="admin-nav" class="nav nav-pills nav-stacked">
-                    <li id="admin-nav-item"><a href="#">Posts</a></li>
-                    <li id="admin-nav-item"><a href="#">Pages</a></li>
-                    <li id="admin-nav-item"><a href="#">Comments</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listBlogPosts">Posts</a>
+                        <ul class="dropdown-menu">
+                            <li class="disabled"><a href="adminPortal">All Posts</a></li>
+                            <li><a href="addNew">Add Post</a></li> 
+                        </ul>
+                    </li>
+                    <li id="admin-nav-item" class="dropdown"><a href="#">Pages</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a href="#">Comments</a></li>
                 </ul>
             </div>
             <div class="col-sm-10" id="admin-view-box">
-                <div class="col-sm-1"></div>
+                
 
-                <div class="col-sm-10">
+                <div class="col-sm-11">
                     <h3 id="table-header"></h3>
                     <table class="table table-hover" id="posts-table">
                         <th width="20%">Title</th>

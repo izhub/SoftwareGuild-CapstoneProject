@@ -10,6 +10,7 @@ import com.swcguild.blogcapstoneproject.dto.Post;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -149,6 +150,8 @@ public class BlogDao implements BlogPostDaoInterface {
             post.setPostTitle(rs.getString("post_title"));
             post.setPostContent(rs.getString("post_content"));
             post.setPostDate(postDate);
+            post.setPostCategories("categories");
+            post.setPostTags("tags");
 
             return post;
         }
