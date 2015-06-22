@@ -77,8 +77,8 @@ public class BlogController {
     public void addBlogPost(@RequestBody Post post) {
         if (post!=null) {
             Date date = new Date();
+            // we need to get the user that is currently posting
             post.setPostUserId(2);
-            post.setPostType("blog");
             post.setPostDate(date);
             dao.addPost(post);
         }
