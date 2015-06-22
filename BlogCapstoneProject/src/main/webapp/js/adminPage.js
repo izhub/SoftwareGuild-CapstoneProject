@@ -12,6 +12,10 @@ function loadAllPosts() {
         $.each(data, function (index, post) {
             $('#table-header').text('Posts');
             items.push('<tr><td><a>' + post.postTitle + '</a></td>');
+            
+            var date = new Date(post.postDate);
+            var formattedDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+            
             if (post.postUserId === 1) {
                 items.push('<td>admin</td>');
             } else {
@@ -23,7 +27,7 @@ function loadAllPosts() {
 //            });
             items.push('</td>');
             items.push('<td>' + post.postStatus + '</td>');
-            items.push('<td>' + post.postDate + '</td>');
+            items.push('<td>' + formattedDate + '</td>');
             items.push('<td><a>Edit</a></td>');
             items.push('<td><a onclick="deletePost(' + post.postId + ')">Delete</a></td></tr>');
         });
