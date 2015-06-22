@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -63,15 +64,20 @@
         <div class="container-fluid">
             <h1>Admin Portal</h1>
             <hr/>
-            <div class ="col-sm-2">
+             <div class ="col-sm-2">
                 <ul id="admin-nav" class="nav nav-pills nav-stacked">
                     <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listBlogPosts">Posts</a>
                         <ul class="dropdown-menu">
-                            <li><a href="adminPortal">All Posts</a></li>
-                            <li class="disabled"><a href="addNew">Add Post</a></li> 
+                            <li id="all-posts-button"><a href="adminBlogView">All Posts</a></li>
+                            <li id="add-post-button"><a href="addNewPost">Add Post</a></li> 
                         </ul>
                     </li>
-                    <li id="admin-nav-item" class="dropdown"><a href="#">Pages</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listStaticPages">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li id="all-pages-button"><a href="adminPageView">All Pages</a></li>
+                            <li id="add-static-page-button"><a href="addNewPage">Add Page</a></li>
+                        </ul>
+                    </li>
                     <li id="admin-nav-item" class="dropdown"><a href="#">Comments</a></li>
                 </ul>
             </div>
@@ -79,9 +85,16 @@
 
                 <!-- LEFT COLUMN OF ADD_POST BOX - TEXT EDITOR AND TITLE-->
                 <div id="text-content-box" class="col-sm-9">
-                    <h3><strong>Add New Post</strong></h3>
+                    <c:set var="type" value="${postType}"/>
+                    <c:if test="${fn:startsWith(type, 'blog')}">
+                        <h3><strong>Add Blog Post</strong></h3>
+                    </c:if>
+                    <c:if test="${fn:startsWith(type, 'page')}">
+                        <h3><strong>Add Static Page</strong></h3> 
+                    </c:if>
+
                     <form class="form-horizontal">  
-                        <input type="hidden" id="postType" name="postType"/>
+                        <input type="hidden" id="postType" name="postType" value="${postType}"/>
                         <div class="form-group">
                             <div class="col-sm-6">
                                 <input type="text" id="postTitle" name="postTitle" class="form-control" placeholder="Title"/>

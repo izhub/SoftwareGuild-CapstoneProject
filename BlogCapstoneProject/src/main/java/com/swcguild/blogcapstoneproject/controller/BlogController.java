@@ -10,8 +10,10 @@ import com.swcguild.blogcapstoneproject.dto.Post;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,66 +27,94 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Controller
 public class BlogController {
-    
+
     BlogPostDaoInterface dao;
-    
+
     @Inject
     public BlogController(BlogPostDaoInterface dao) {
         this.dao = dao;
-        
     }
-    
-    @RequestMapping(value={"/", "/index"}, method=RequestMethod.GET)
+
+    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public String homePage() {
+    public String homePage(Model model) {
+        model.addAttribute("blogList", dao.listPostsForIndex());
         return "index";
     }
-    
-     
-    @RequestMapping(value="login", method=RequestMethod.GET)
+
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String displayLogin() {
         return "login";
     }
-    
-    @RequestMapping(value="adminPortal", method=RequestMethod.GET)
+
+    @RequestMapping(value = {"adminPortal", "adminBlogView"}, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public String displayAdminPortal() {
-        return "adminPage";
+    public String displayAdminPostView() {
+        return "adminBlogView";
     }
-    
-    @RequestMapping(value="addNew", method=RequestMethod.GET)
+
+    @RequestMapping(value = "addNewPost", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public String displayAddNew() {
+    public String displayAddNewPost(Model model) {
+        model.addAttribute("postType", "blog");
         return "addNewPost";
     }
     
-    @RequestMapping(value="post/{id}", method=RequestMethod.DELETE)
+    @RequestMapping(value="adminPageView", method=RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String displayAdminPageView() {
+        return "adminPageView";
+    }
+
+    @RequestMapping(value = "addNewPage", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String displayAddNewPage(Model model) {
+        model.addAttribute("postType", "page");
+        return "addNewPost";
+    }
+
+    @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deletePost(@PathVariable int id) {
         dao.deletePost(id);
     }
     
-    @RequestMapping(value="posts", method=RequestMethod.GET) 
+    @RequestMapping(value="page/{id}", method= RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePage(@PathVariable int id) {
+        dao.deletePost(id);
+    }
+    
+    @RequestMapping(value = "posts", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Post> getBlogPosts() {
         return dao.listPosts();
     }
-    
-    @RequestMapping(value="post", method=RequestMethod.POST) 
+
+    @RequestMapping(value = "pages", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Post> getStaticPages() {
+        return dao.listPages();
+    }
+
+    @RequestMapping(value = "post/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String displayPostPage(@PathVariable int id, Model model) {
+        model.addAttribute("post", dao.getPost(id));
+        return "staticPage";
+    }
+
+    @RequestMapping(value = "post", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void addBlogPost(@RequestBody Post post) {
-        if (post!=null) {
+        if (post != null) {
             Date date = new Date();
             post.setPostUserId(2);
-            post.setPostType("blog");
             post.setPostDate(date);
             dao.addPost(post);
         }
     }
-    
-    
-    
-    
 }

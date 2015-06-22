@@ -10,7 +10,6 @@ import com.swcguild.blogcapstoneproject.dto.Post;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,7 +30,7 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_SELECT_POST = "SELECT * FROM posts WHERE post_id = ?";
 
-    private final String SQL_LIST_ALL_POSTS = "SELECT * FROM posts";
+    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type LIKE 'blog'";
 
     private final String SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, user_id, comment_author_name, comment_content, comment_date) "
             + "VALUES (?, ?, ?, ?, ?)";
@@ -41,6 +40,8 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_SELECT_COMMENT = "SELECT * FROM comments WHERE comment_id = ?";
 
     private final String SQL_LIST_COMMENTS_BY_POST_ID = "SELECT * FROM comments WHERE post_id = ?";
+    
+    private final String LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type LIKE 'page'";
 
     //2a: Declare JdbcTemplate Reference - the instance will be handed to us by Spring
     private JdbcTemplate jdbcTemplate;
@@ -82,7 +83,47 @@ public class BlogDao implements BlogPostDaoInterface {
 
     @Override
     public List<Post> listPosts() {
-        return jdbcTemplate.query(SQL_LIST_ALL_POSTS, new PostMapper());
+        return jdbcTemplate.query(SQL_LIST_BLOG_POSTS, new PostMapper());
+    }
+    
+//     limit to 5 posts per page?
+    @Override
+    public List<Post> listPostsForIndex() {
+        List<Post> posts = jdbcTemplate.query(SQL_LIST_BLOG_POSTS, new PostMapper());
+        
+        for (Post post: posts) {  
+            String[] contentArray = post.getPostContent().split(" ");
+            String exerpt = "";
+            int limit = contentArray.length > 50 ? 50 : contentArray.length;
+
+            for (int i = 0; i < limit; i++) {
+                exerpt += contentArray[i] + " ";
+            }
+            exerpt += "...";
+            post.setPostContent(exerpt);
+        }
+        return posts;  
+    }
+
+//        String[] contentArray = req.getParameter("content").split(" ");
+//        String exerpt = "";
+//        
+//        int limit = contentArray.length >50 ? 50 :contentArray.length;
+//        
+//        for (int i=0; i < limit; i++ ) {
+//            exerpt += contentArray[i] + "";
+//        }
+//            exerpt += "....";
+//            model.addAttribute("content", exerpt);
+//            return "tinyMCESubmit";
+//        }//for loop and get first 50 words of content
+        // create a new list and do stuff
+        
+        //return the new list
+    
+    @Override
+    public List<Post> listPages() {
+        return jdbcTemplate.query(LIST_STATIC_PAGES, new PostMapper());
     }
 
     @Override
@@ -122,8 +163,8 @@ public class BlogDao implements BlogPostDaoInterface {
 
         @Override
         public Comment mapRow(ResultSet rs, int i) throws SQLException {
+            
             Timestamp commentDate = rs.getTimestamp("comment_date");
-
             Comment comment = new Comment();
             comment.setCommentId(rs.getInt("comment_id"));
             comment.setPostId(rs.getInt("post_id"));
@@ -142,7 +183,6 @@ public class BlogDao implements BlogPostDaoInterface {
         @Override
         public Post mapRow(ResultSet rs, int i) throws SQLException {
             Timestamp postDate = rs.getTimestamp("post_date");
-
             Post post = new Post();
             post.setPostId(rs.getInt("post_id"));
             post.setPostUserId(rs.getInt("post_user_id"));

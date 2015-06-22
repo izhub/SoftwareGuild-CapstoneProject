@@ -11,7 +11,7 @@ function loadAllPosts() {
     }).success(function (data, status) {
         $.each(data, function (index, post) {
             $('#table-header').text('Posts');
-            items.push('<tr><td><a>' + post.postTitle + '</a></td>');
+            items.push('<tr><td>' + post.postTitle + '</td>');
             
             var date = new Date(post.postDate);
             var formattedDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
@@ -21,11 +21,6 @@ function loadAllPosts() {
             } else {
                 items.push('<td>marketing</td>');
             }
-            items.push('<td>');
-//            $.each(post.postCategories, function (index, category) {
-//                items.push(category + '&nbsp;&nbsp'); 
-//            });
-            items.push('</td>');
             items.push('<td>' + post.postStatus + '</td>');
             items.push('<td>' + formattedDate + '</td>');
             items.push('<td><a>Edit</a></td>');
@@ -44,6 +39,10 @@ function deletePost(postId) {
            loadAllPosts(); 
         });
     }
+}
+
+function clearPostTable() {
+    $('#posts-table-content').empty();
 }
 
 //function loadAllPosts() {
@@ -66,9 +65,6 @@ function deletePost(postId) {
 //    $('#posts-table-content').append(items.join(''));
 //}
 
-function clearPostTable() {
-    $('#posts-table-content').empty();
-}
 
 
 

@@ -1,6 +1,5 @@
 $(document).ready(function () {
     loadCategoriesTest();
-    $('#postType').val('blog');
 });
 
 $('#commit').click(function () {
@@ -23,14 +22,18 @@ $('#commit').click(function () {
             201: function () {
                 $('#postTitle').val('');
                 tinymce.get(tinymce_editor_id).setContent('');
-                $('#add-confirmation').append('<h5 id="added-message" style="color: green;"><strong>Post has been added.</strong></h5>');
+                if ($('#postType').val() === 'blog') {
+                    $('#add-confirmation').append('<h5 id="added-message" style="color: green;"><strong>Post has been added.</strong></h5>');
+                } else {
+                    $('#add-confirmation').append('<h5 id="added-message" style="color: green;"><strong>Page has been added.</strong></h5>');
+                }
                 setTimeout(function () {
                     $('#added-message').fadeOut('slow');
-                }, 2000);           
+                }, 2000);
             }
         }
     });
-    $('#add-confirmation').empty();  
+    $('#add-confirmation').empty();
 });
 
 

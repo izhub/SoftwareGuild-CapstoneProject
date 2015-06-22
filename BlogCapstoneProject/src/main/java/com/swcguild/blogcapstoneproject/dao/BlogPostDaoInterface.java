@@ -19,10 +19,11 @@ public interface BlogPostDaoInterface {
     public void deletePost(int postId);
     public Post getPost(int postId);
     public List<Post> listPosts();
+    public List<Post> listPages();
+    public List<Post> listPostsForIndex();
     
     public void addComment(Comment comment);
     public void deleteComment(int commentId);
     public Comment getComment(int commentId);
     public List<Comment> listCommentsForPost(int postId);
-    
 }

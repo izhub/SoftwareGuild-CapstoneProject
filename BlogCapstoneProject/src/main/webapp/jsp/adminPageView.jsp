@@ -49,27 +49,29 @@
                 <ul id="admin-nav" class="nav nav-pills nav-stacked">
                     <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listBlogPosts">Posts</a>
                         <ul class="dropdown-menu">
-                            <li class="disabled"><a href="adminPortal">All Posts</a></li>
-                            <li><a href="addNew">Add Post</a></li> 
+                            <li id="all-posts-button"><a href="adminBlogView">All Posts</a></li>
+                            <li id="add-post-button"><a href="addNewPost">Add Post</a></li> 
                         </ul>
                     </li>
-                    <li id="admin-nav-item" class="dropdown"><a href="#">Pages</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listStaticPages">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li id="all-pages-button"><a href="adminBlogView">All Pages</a></li>
+                            <li id="add-static-page-button"><a href="addNewPage">Add Page</a></li>
+                        </ul>
+                    </li>
                     <li id="admin-nav-item" class="dropdown"><a href="#">Comments</a></li>
                 </ul>
             </div>
             <div class="col-sm-10" id="admin-view-box">
-                
-
                 <div class="col-sm-11">
                     <h3 id="table-header"></h3>
                     <table class="table table-hover" id="posts-table">
                         <th width="20%">Title</th>
                         <th width="20%">Author</th>
-                        <th width="20%">Category</th>
-                        <th width="15%">Status</th>
-                        <th width="15%">Date</th>
-                        <th width="5%"></th>
-                        <th width="5%"></th>
+                        <th width="20%">Status</th>
+                        <th width="20%">Date</th>
+                        <th width="10%"></th>
+                        <th width="10%"></th>
                         <tbody id="posts-table-content"></tbody>
                     </table>
                 </div>
@@ -78,6 +80,6 @@
         </div> 
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/adminPage.js"></script>
+        <script src="${pageContext.request.contextPath}/js/adminPageView.js"></script>
     </body>    
 </html>
