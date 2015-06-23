@@ -11,7 +11,7 @@ function loadAllPages() {
     }).success(function (data, status) {
         $.each(data, function (index, post) {
             $('#table-header').text('Static Pages');
-            items.push('<tr><td>' + post.postTitle + '</td>');
+            items.push('<tr><td><a href="post/' + post.postId + '">' + post.postTitle + '</a></td>');
             
             var date = new Date(post.postDate);
             var formattedDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();

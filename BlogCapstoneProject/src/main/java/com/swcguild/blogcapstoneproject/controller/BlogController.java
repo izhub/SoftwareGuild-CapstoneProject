@@ -80,12 +80,6 @@ public class BlogController {
         model.addAttribute("post", dao.getPost(id));
         return "editView";
     }
-    
-//    @RequestMapping(value="displaEditPost", method=RequestMethod.GET)
-//    @ResponseStatus(HttpStatus.OK)
-//    public String displayEditPostView(Model model) {
-//        model.addAttribute("postType", "page")
-//    }
 
     @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)

@@ -10,8 +10,9 @@ function loadAllPosts() {
         url: 'posts'
     }).success(function (data, status) {
         $.each(data, function (index, post) {
+            
             $('#table-header').text('Posts');
-            items.push('<tr><td>' + post.postTitle + '</td>');
+            items.push('<tr><td><a href="post/' + post.postId + '">' + post.postTitle + '</a></td>');
             
             var date = new Date(post.postDate);
             var formattedDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
@@ -21,10 +22,12 @@ function loadAllPosts() {
             } else {
                 items.push('<td>marketing</td>');
             }
+            
             items.push('<td>' + post.postStatus + '</td>');
             items.push('<td>' + formattedDate + '</td>');
             items.push('<td><a href= "displayEditView/' + post.postId +'">Edit</a></td>');
             items.push('<td><a onclick="deletePost(' + post.postId + ')">Delete</a></td></tr>');
+            
         });
         $('#posts-table-content').append(items.join(''));
     });

@@ -26,7 +26,7 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_INSERT_POST = "INSERT INTO posts (post_user_id, post_type, post_title, post_content, post_date) "
             + "VALUES (?, ?, ?, ?, ?)";
     
-    private final String UPDATE_POST = "update posts set post_user_id=?, post_type=?, post_title=?, post_content=? where post_id = ?";
+    private final String UPDATE_POST = "UPDATE posts SET post_type = ?, post_title = ?, post_content=? WHERE post_id = ?";
 
     private final String SQL_DELETE_POST = "DELETE FROM posts WHERE post_id = ?";
 
@@ -74,7 +74,7 @@ public class BlogDao implements BlogPostDaoInterface {
     
     @Override
     public void updatePost(Post post, int postId) {
-        jdbcTemplate.update(UPDATE_POST, post.getPostUserId(), post.getPostType(), post.getPostTitle(),  post.getPostContent(), postId);
+        jdbcTemplate.update(UPDATE_POST, post.getPostType(), post.getPostTitle(),  post.getPostContent(), postId);
     }
 
     @Override

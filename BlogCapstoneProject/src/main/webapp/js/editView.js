@@ -9,6 +9,7 @@ $('#commit').click(function () {
         url: "post/" + $('#postId').val(),
         type: "PUT",
         data: JSON.stringify({
+            postId: $('#postId').val(),
             postTitle: $('#postTitle').val(),
             postContent: tinymce.get(tinymce_editor_id).getContent(),
             postType: $('#postType').val()
@@ -17,7 +18,7 @@ $('#commit').click(function () {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        dataType: 'json',
+        'dataType': 'json',
         statusCode: {
             201: function () {
                 $('#postTitle').val('');
