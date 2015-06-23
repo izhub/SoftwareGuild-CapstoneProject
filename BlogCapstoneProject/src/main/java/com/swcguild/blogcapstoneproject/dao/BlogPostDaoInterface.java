@@ -17,6 +17,7 @@ public interface BlogPostDaoInterface {
     
     public void addPost(Post post);
     public void deletePost(int postId);
+    public void updatePost(Post post, int postId);
     public Post getPost(int postId);
     public List<Post> listPosts();
     public List<Post> listPages();

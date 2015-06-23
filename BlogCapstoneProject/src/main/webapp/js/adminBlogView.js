@@ -23,7 +23,7 @@ function loadAllPosts() {
             }
             items.push('<td>' + post.postStatus + '</td>');
             items.push('<td>' + formattedDate + '</td>');
-            items.push('<td><a>Edit</a></td>');
+            items.push('<td><a href= "displayEditView/' + post.postId +'">Edit</a></td>');
             items.push('<td><a onclick="deletePost(' + post.postId + ')">Delete</a></td></tr>');
         });
         $('#posts-table-content').append(items.join(''));

@@ -73,6 +73,19 @@ public class BlogController {
         model.addAttribute("postType", "page");
         return "addNewPost";
     }
+    
+    @RequestMapping(value="displayEditView/{id}", method=RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String displayEditView(@PathVariable int id, Model model) {
+        model.addAttribute("post", dao.getPost(id));
+        return "editView";
+    }
+    
+//    @RequestMapping(value="displaEditPost", method=RequestMethod.GET)
+//    @ResponseStatus(HttpStatus.OK)
+//    public String displayEditPostView(Model model) {
+//        model.addAttribute("postType", "page")
+//    }
 
     @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
@@ -98,6 +111,12 @@ public class BlogController {
     @ResponseBody
     public List<Post> getStaticPages() {
         return dao.listPages();
+    }
+    
+    @RequestMapping(value="displayEditView/post/{id}", method=RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void updatePost(@RequestBody Post post) {
+        dao.updatePost(post, post.getPostId());
     }
 
     @RequestMapping(value = "post/{id}", method = RequestMethod.GET)

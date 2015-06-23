@@ -131,12 +131,16 @@ public class BlogDaoTest {
 //
 //    }
 //
-//    @Test
-//    public void updatePost() {
-//
-//    }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
+    @Test
+    public void updatePost() {
+        Post ps = dao.getPost(48);
+        ps.setPostTitle("NOOO WAAYYY");
+        dao.updatePost(ps, ps.getPostId());
+        assertEquals("NOOO WAAYYY", dao.getPost(48).getPostTitle());
+
+    }
+//     TODO add test methods here.
+//    // The methods must be annotated with annotation @Test. For example:
     //
     // @Test
     // public void hello() {}
