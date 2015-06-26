@@ -1,15 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Index</title>
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
-
-
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
+        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/functions.js"></script>
         <style>
             body {
                 background-color: lightsteelblue;
@@ -18,11 +20,11 @@
                 background-color: white;
                 border: 2px solid gray;
                 padding: 20px;
-                margin-bottom: 10px;
+                margin-bottom: 100px;
                 margin-top: 20px;
                 border-radius: 5px;
             }
-            h1  {
+            h1, h4, h5 {
                 margin-left: 10px;
                 font-family: "Times New Roman", "Times", serif;
                 font-weight: bold;
@@ -35,6 +37,24 @@
             }
             a {
                 color: royalblue;
+            }
+            #comment-text{
+                margin: 20px;
+            }
+            #add-comment-row{
+                margin-top: 100px;
+            }
+            #list-of-comments {
+                margin-top: 10px;
+                padding: 10px;
+                background-color: white;
+                border-radius: 5px;
+                border: 2px solid gray;
+            }
+            #comment-content {
+                padding: 15px;
+                background-color: lightgray;
+                border-radius: 5px;
             }
         </style> 
     </head>
@@ -51,73 +71,148 @@
                     </c:forEach>
                 </ul>    
             </div>   
-            <h1>Coding Geekette</h1>  
+            <h1>Blog</h1>  
             <hr/>
         </div>
         <div class="container">
 
             <!--LEFT COLUMN - BLOG POST CONTENT--->
-
-            <div id="post" class="col-sm-10">
-                <h2>${post.postTitle}</h2>
-                <div class="post-content">
-                    <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
-                        <c:forEach var="category" items="${post.postCategories}">  
-                            <a href="#">${category}</a> 
-                        </c:forEach>&nbsp;&nbsp;&nbsp;
-                        <c:forEach var="tag" items="${post.postTags}"> 
-                            <a href="#">${tag}</a>
-                        </c:forEach>
-                    </p>
-                    <div class="post-body">
-                        ${post.postContent}     
-                    </div>
-                    <br/>
-<!--                    <div class="post-footer">
-                        <div class="form-horizontal">
-                        <h5><strong>Comments</strong</h5>
-                        
-                        <h5><strong>Tags:</strong></h5>
+            <div id="left-column" class="col-sm-10">
+                <div id="post" class="row">
+                    <h2>${post.postTitle}</h2>
+                    <div class="post-content">
+                        <input type="hidden" id="postId" value="${post.postId}"/>
+                        <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
+                            <c:forEach var="category" items="${post.postCategories}">  
+                                <a href="#">${category}</a> 
+                            </c:forEach>&nbsp;&nbsp;&nbsp;
+                            <c:forEach var="tag" items="${post.postTags}"> 
+                                <a href="#">${tag}</a>
+                            </c:forEach>
+                        </p>
+                        <div class="post-body">
+                            ${post.postContent}     
+                        </div>
+                        <br/>
+                        <!--                    <div class="post-footer">
+                                                <div class="form-horizontal">
+                                                <h5><strong>Comments</strong</h5>
+                                                
+                                                <h5><strong>Tags:</strong></h5>
                         <c:forEach var="tag" items="${post.postTags}"> 
                             <a href="#">${tag}</a>
                         </c:forEach>
                     </div>-->
+                    </div>
+                </div>
+                <div id="comments"></div>
+                <div class="row" id="add-comment-row">
+                    <div class="col-sm-6">
+                        <sf:form modelAttribute="comment" class="form-horizontal" action="${pageContext.request.contextPath}/addComment" method="POST">
+                            <div class="form-group">
+
+                                <h4>Comment:</h4>
+
+                            </div>
+                            <input type="hidden" name="postId" value="${post.postId}"/>
+                            <div class="comment-text form-group">
+                                <div id="comment-content-box" class="col-sm-offset-2 col-sm-8">
+                                    <textarea id="comment-textarea" name="commentContent" cols="50" rows="5"></textarea>
+                                </div>                          
+                            </div>
+                            <div class="form-group">
+                                <label for="comment-name" class="col-sm-1 control-label">Name</label>
+                                <div class="col-sm-offset-1 col-sm-6">
+                                    <input type="text" name="commentAuthorName" class="form-control" id="comment-name" placeholder="Name"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment-email" class="col-sm-1 control-label">Email</label>
+                                <div class="col-sm-offset-1 col-sm-6">
+                                    <input type="email" name="commentEmail" class="form-control" id="comment-email" placeholder="username@example.com"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment-website" class="col-sm-1 control-label">Website</label>
+                                <div class="col-sm-offset-1 col-sm-6">
+                                    <input type="text" name="commentWebsite" class="form-control" id="comment-website" placeholder="website"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div  class="col-sm-offset-2 col-sm-2">
+                                    <button id="comment-submit-button" type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                            </div>
+                        </sf:form>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="hidden" id="validation" value="${validation}"/>
+                    <form class="form-horizontal" method="post">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <img id="captcha_image" src="captcha" />
+                                <button class="btn btn-default" id="refreshCaptcha">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" name="captcha" />
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn btn-default" name="Submit">Submit</button>
+                            </div>
+                        </div>
+
+
+                    </form>
                 </div>
             </div>
+            <!--END OF LEFT COLUMN-->
 
             <!--RIGHT COLUMN-->
 
-            <div id="right-col" class="col-sm-2">
+            <div class="col-sm-2">
                 <div class="row">
-                    <hr/>
-                    <h4><strong>Recent Posts</strong></h4>
-                    <hr/>
-                    <div id="recent-posts-body">
-                        <c:forEach var="recentpost" items="${recentPostList}">
-                        </c:forEach>
-                        <p>Posts</p>
-                        <p>Posts</p>
-                        <p>Posts</p>
-                        <p>Posts</p>
-                        <p>Posts</p>
-                        <p>Posts</p>
+                    <div class="col-sm-12">
+                        <h4><strong>Recent Posts</strong></h4>
+                        <hr/>
+                        <div id="recent-posts-body">
+                            <c:forEach var="recentpost" items="${recentPostList}">
+                            </c:forEach>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                        </div>
                     </div>
-
                 </div>
                 <div class="row">
-                    <hr/>
-                    <h4><strong>Tags</strong></h4>
-                    <hr/>
-                    <div id="tags-body">
-                        <c:forEach var="tag" items="${tags}">
-                        </c:forEach>
-                        <p>Tags</p>
-                        <p>Tags</p>
-                        <p>Tags</p>
-                        <p>Tags</p>
+                    <div class="col-sm-12">
+                        <hr/>
+                        <h4><strong>Tags</strong></h4>
+                        <hr/>
+                        <div id="tags-body">
+                            <c:forEach var="tag" items="${tags}">
+                            </c:forEach>
+                            <p>Tags</p>
+                            <p>Tags</p>
+                            <p>Tags</p>
+                            <p>Tags</p>
+                            <p>Tags</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+
+    </div>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/staticPage.js"></script>
+</body>
 </html>

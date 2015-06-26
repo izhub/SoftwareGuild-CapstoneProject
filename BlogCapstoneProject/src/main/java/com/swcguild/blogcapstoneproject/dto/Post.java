@@ -6,7 +6,6 @@
 package com.swcguild.blogcapstoneproject.dto;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**

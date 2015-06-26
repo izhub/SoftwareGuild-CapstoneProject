@@ -14,7 +14,7 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: "post/" + $('#postId').val(),
+            url: "../post/" + $('#postId').val(),
             type: "PUT",
             data: JSON.stringify({
                 postId: $('#postId').val(),
@@ -84,16 +84,16 @@ $(document).ready(function () {
     });
 // functions
 
-    function populateTagsAndCategories() {
-        $('#categoryList input[type=checkbox]').each(function () {
-            categories.push($(this).attr("name"));
-        });
-
-        $('#tagList .btnTag').each(function () {
-            tags.push($(this).text().trim().toLowerCase());
-        });
-
-    }
+//    function populateTagsAndCategories() {
+//        $('#categoryList input[type=checkbox]').each(function () {
+//            categories.push($(this).attr("name"));
+//        });
+//
+//        $('#tagList .btnTag').each(function () {
+//            tags.push($(this).text().trim().toLowerCase());
+//        });
+//
+//    }
 
     function addTags() {
         var tagSplit = $('#tags').val().split(',');

@@ -15,20 +15,74 @@ import java.util.Objects;
 public class Comment {
 
     private int commentId;
+    private String postTitle;
     private int postId;
     private int userId;
+    private String commentWebsite;
+    private String commentStatus;
+    private String commentEmail;
     private String commentContent;
     private String commentAuthorName;
     private String commentAuthorEmail;
     private String commentAuthorWebsite;
     private Date commentDate;
 
-    public Date getCommentDate() {
-        return commentDate;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + this.commentId;
+        hash = 67 * hash + Objects.hashCode(this.postTitle);
+        hash = 67 * hash + this.postId;
+        hash = 67 * hash + this.userId;
+        hash = 67 * hash + Objects.hashCode(this.commentWebsite);
+        hash = 67 * hash + Objects.hashCode(this.commentStatus);
+        hash = 67 * hash + Objects.hashCode(this.commentEmail);
+        hash = 67 * hash + Objects.hashCode(this.commentContent);
+        hash = 67 * hash + Objects.hashCode(this.commentAuthorName);
+        hash = 67 * hash + Objects.hashCode(this.commentDate);
+        return hash;
     }
 
-    public void setCommentDate(Date commentDate) {
-        this.commentDate = commentDate;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Comment other = (Comment) obj;
+        if (this.commentId != other.commentId) {
+            return false;
+        }
+        if (!Objects.equals(this.postTitle, other.postTitle)) {
+            return false;
+        }
+        if (this.postId != other.postId) {
+            return false;
+        }
+        if (this.userId != other.userId) {
+            return false;
+        }
+        if (!Objects.equals(this.commentWebsite, other.commentWebsite)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentStatus, other.commentStatus)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentEmail, other.commentEmail)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentContent, other.commentContent)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentAuthorName, other.commentAuthorName)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentDate, other.commentDate)) {
+            return false;
+        }
+        return true;
     }
 
     public int getCommentId() {
@@ -37,6 +91,14 @@ public class Comment {
 
     public void setCommentId(int commentId) {
         this.commentId = commentId;
+    }
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
     }
 
     public int getPostId() {
@@ -55,6 +117,30 @@ public class Comment {
         this.userId = userId;
     }
 
+    public String getCommentWebsite() {
+        return commentWebsite;
+    }
+
+    public void setCommentWebsite(String commentWebsite) {
+        this.commentWebsite = commentWebsite;
+    }
+
+    public String getCommentStatus() {
+        return commentStatus;
+    }
+
+    public void setCommentStatus(String commentStatus) {
+        this.commentStatus = commentStatus;
+    }
+
+    public String getCommentEmail() {
+        return commentEmail;
+    }
+
+    public void setCommentEmail(String commentEmail) {
+        this.commentEmail = commentEmail;
+    }
+
     public String getCommentContent() {
         return commentContent;
     }
@@ -71,70 +157,11 @@ public class Comment {
         this.commentAuthorName = commentAuthorName;
     }
 
-    public String getCommentAuthorEmail() {
-        return commentAuthorEmail;
+    public Date getCommentDate() {
+        return commentDate;
     }
 
-    public void setCommentAuthorEmail(String commentAuthorEmail) {
-        this.commentAuthorEmail = commentAuthorEmail;
+    public void setCommentDate(Date commentDate) {
+        this.commentDate = commentDate;
     }
-
-    public String getCommentAuthorWebsite() {
-        return commentAuthorWebsite;
-    }
-
-    public void setCommentAuthorWebsite(String commentAuthorWebsite) {
-        this.commentAuthorWebsite = commentAuthorWebsite;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 19 * hash + this.commentId;
-        hash = 19 * hash + this.postId;
-        hash = 19 * hash + this.userId;
-        hash = 19 * hash + Objects.hashCode(this.commentContent);
-        hash = 19 * hash + Objects.hashCode(this.commentAuthorName);
-        hash = 19 * hash + Objects.hashCode(this.commentAuthorEmail);
-        hash = 19 * hash + Objects.hashCode(this.commentAuthorWebsite);
-        hash = 19 * hash + Objects.hashCode(this.commentDate);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Comment other = (Comment) obj;
-        if (this.commentId != other.commentId) {
-            return false;
-        }
-        if (this.postId != other.postId) {
-            return false;
-        }
-        if (this.userId != other.userId) {
-            return false;
-        }
-        if (!Objects.equals(this.commentContent, other.commentContent)) {
-            return false;
-        }
-        if (!Objects.equals(this.commentAuthorName, other.commentAuthorName)) {
-            return false;
-        }
-        if (!Objects.equals(this.commentAuthorEmail, other.commentAuthorEmail)) {
-            return false;
-        }
-        if (!Objects.equals(this.commentAuthorWebsite, other.commentAuthorWebsite)) {
-            return false;
-        }
-        if (!Objects.equals(this.commentDate, other.commentDate)) {
-            return false;
-        }
-        return true;
-    }
-
 }

@@ -7,6 +7,7 @@ package com.swcguild.blogcapstoneproject.controller;
 
 import com.octo.captcha.service.image.ImageCaptchaService;
 import com.swcguild.blogcapstoneproject.dao.BlogPostDaoInterface;
+import com.swcguild.blogcapstoneproject.dto.Comment;
 import com.swcguild.blogcapstoneproject.dto.Post;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -24,6 +25,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +71,7 @@ public class BlogController {
     public String displayAddNewPost(Model model) {
         model.addAttribute("postType", "blog");
         model.addAttribute("categoryList", dao.getAllTerms("category"));
-        return "addNewPost";
+        return "addPost";
     }
 
     @RequestMapping(value = "adminPageView", method = RequestMethod.GET)
@@ -82,7 +84,7 @@ public class BlogController {
     @ResponseStatus(HttpStatus.OK)
     public String displayAddNewPage(Model model) {
         model.addAttribute("postType", "page");
-        return "addNewPost";
+        return "addPost";
     }
 
     @RequestMapping(value = "displayEditView/{id}", method = RequestMethod.GET)
@@ -90,10 +92,10 @@ public class BlogController {
     public String displayEditView(@PathVariable int id, Model model) {
         Post post = dao.getPost(id);
         model.addAttribute("post", post);
-        model.addAttribute("categoryList", post.getPostCategories());
-        model.addAttribute("tagList", post.getPostTags());
+        model.addAttribute("categoryList", Arrays.asList(post.getPostCategories().split(",")));
+        model.addAttribute("tagList", Arrays.asList(post.getPostTags().split(",")));
 
-        return "editView";
+        return "editPost";
     }
 
     @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
@@ -122,7 +124,7 @@ public class BlogController {
         return dao.listPages();
     }
 
-    @RequestMapping(value = "displayEditView/post/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "post/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
     public void updatePost(@RequestBody Post post) {
         dao.updatePost(post, post.getPostId());
@@ -164,9 +166,55 @@ public class BlogController {
             }
 
             dao.addTerms(categories, tags);
-            dao.deleteUnusedTags();
             dao.addPostToTerms(post.getPostId(), categories, tags);
+            dao.deleteUnusedTags();
         }
+    }
+
+    @RequestMapping(value = "adminCommentView", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String displayAdminCommentPage() {
+        return "adminCommentView";
+    }
+
+    @RequestMapping(value = "addComment", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public String addComment(@ModelAttribute("comment") Comment comment) {
+        Date date = new Date();
+        comment.setCommentDate(date);
+        comment.setUserId(1);
+        dao.addComment(comment);
+        return "redirect:post/" + comment.getPostId();
+    }
+
+    @RequestMapping(value = "comments", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Comment> getAllComments() {
+        return dao.listAllComments();
+    }
+
+    @RequestMapping(value = "comments/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Comment> getAllCommentsForPost(@PathVariable int id) {
+        return dao.listCommentsForPost(id);
+    }
+
+    @RequestMapping(value = "approveComment/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void approveComment(@PathVariable int id) {
+        Comment comment = dao.getComment(id);
+        comment.setCommentStatus("approved");
+        dao.updateComment(comment);
+    }
+
+    @RequestMapping(value = "unapproveComment/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void unapproveComment(@PathVariable int id) {
+        Comment comment = dao.getComment(id);
+        comment.setCommentStatus("unapproved");
+        dao.updateComment(comment);
     }
 
     private static ImageCaptchaService instance;

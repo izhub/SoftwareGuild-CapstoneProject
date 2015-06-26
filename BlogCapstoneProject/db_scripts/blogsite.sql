@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 23, 2015 at 09:48 AM
+-- Generation Time: Jun 26, 2015 at 01:43 PM
 -- Server version: 5.5.43-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.9
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `post_date` datetime NOT NULL,
   PRIMARY KEY (`post_id`),
   KEY `post_user_id` (`post_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
 
 -- --------------------------------------------------------
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `terms` (
   `term_type` varchar(50) NOT NULL,
   PRIMARY KEY (`term_id`),
   KEY `term_name` (`term_name`,`term_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=47 ;
 
 -- --------------------------------------------------------
 
@@ -102,14 +102,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`user_id`, `user_name`, `user_display_name`, `user_password`, `user_role`) VALUES
-(1, 'Lobo', 'lobo', 'lobo', 'admin'),
-(2, 'bill', 'billy', 'billy', 'marketing');
-
---
 -- Constraints for dumped tables
 --
 
@@ -121,17 +113,11 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `posts`
---
-ALTER TABLE `posts`
-  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`post_user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
 -- Constraints for table `terms_posts`
 --
 ALTER TABLE `terms_posts`
-  ADD CONSTRAINT `terms_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`),
-  ADD CONSTRAINT `terms_posts_ibfk_1` FOREIGN KEY (`term_id`) REFERENCES `terms` (`term_id`);
+  ADD CONSTRAINT `terms_posts_ibfk_1` FOREIGN KEY (`term_id`) REFERENCES `terms` (`term_id`),
+  ADD CONSTRAINT `terms_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

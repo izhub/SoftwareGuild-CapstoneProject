@@ -43,7 +43,11 @@
     </head>
     <body>
         <div class="container-fluid">
-            <h1>Admin Portal</h1>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1><a href="${pageContext.request.contextPath}/index">Blog</a> <small>admin portal</small></h1>
+                </div>
+            </div>
             <hr/>
             <div class ="col-sm-2">
                 <ul id="admin-nav" class="nav nav-pills nav-stacked">
@@ -59,7 +63,7 @@
                             <li id="add-static-page-button"><a href="addNewPage">Add Page</a></li>
                         </ul>
                     </li>
-                    <li id="admin-nav-item" class="dropdown"><a href="#">Comments</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a href="adminCommentView">Comments</a></li>
                 </ul>
             </div>
             <div class="col-sm-10" id="admin-view-box">

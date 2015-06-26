@@ -12,9 +12,6 @@
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-        <%-- 
-        Author: terry
-        --%>
         <script src="${pageContext.request.contextPath}/js/tinymce/tinymce.min.js"></script>
         <script type="text/javascript">
             tinymce.init({
@@ -67,7 +64,11 @@
     </head>
     <body>
         <div class="container-fluid">
-            <h1>Admin Portal</h1>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1><a href="${pageContext.request.contextPath}/index">Blog</a> <small>admin portal</small></h1>
+                </div>
+            </div>
             <hr/>
             <div class ="col-sm-2">
                 <ul id="admin-nav" class="nav nav-pills nav-stacked">
@@ -83,7 +84,7 @@
                             <li id="add-static-page-button"><a href="${pageContext.request.contextPath}/addNewPage">Add Page</a></li>
                         </ul>
                     </li>
-                    <li id="admin-nav-item" class="dropdown"><a href="#">Comments</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a href="adminCommentView">Comments</a></li>
                 </ul>
             </div>
             <div class="col-sm-10" id="add-post-box">  
@@ -120,6 +121,7 @@
                             </div>
                     </sf:form>
                 </div>
+                    
                 <!-- RIGHT COLUMN OF ADD_POST BOX-->
                 <div class="col-sm-3">
                     <div class="row" style="margin-top: 100px">
@@ -174,7 +176,7 @@
                 </div>
             </div>
         </div> 
-        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/editPost.js"></script>
+        <script src="${pageContext.request.contextPath}/js/functions.js"></script>
     </body>   

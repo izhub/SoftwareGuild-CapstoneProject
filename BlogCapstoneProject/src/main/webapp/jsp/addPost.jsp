@@ -173,4 +173,5 @@
         </div> 
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/addPost.js"></script>
-    </body>   
+    </body>
+</html>

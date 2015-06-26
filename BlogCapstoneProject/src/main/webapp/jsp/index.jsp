@@ -50,15 +50,16 @@
                             <a href="${pageContext.request.contextPath}/staticPages/{${page.pageId}}">${page.pageName}</a>
                         </li>
                     </c:forEach>
-                </ul>    
+                </ul>
             </div>   
-            <h1>Coding Geekette</h1>  
+            <h1>Blog</h1>  
             <hr/>
         </div>
 
-        <!--POST LIST - LEFT COLUMN -->                
+
         <div class="container">
             <div class="row">
+                <!--POST LIST - LEFT COLUMN -->                 
                 <div class="col-sm-10">
                     <div class="blog-posts-block">
                         <c:forEach var="post" items="${blogList}">
@@ -83,19 +84,15 @@
                                     </div>
                                     <div id="post-content-wrap" class="row">
                                         <div class="col-sm-12">
-                                            <p id="post-content">
-                                                ${post.postContent}
-                                            </p>
+                                            ${post.postContent}
                                         </div>
                                     </div>
-                                    <a class="btn btn-primary" href="post/${post.postId}">Read More</a>
                                 </div>
+                                <a class="btn btn-primary" href="post/${post.postId}">Read More</a>
                             </div>
-                        </c:forEach>
-                    </div>
+                        </div>
+                    </c:forEach>
                 </div>
-
-
                 <!--RIGHT COLUMN-->
                 <div class="col-sm-2">
                     <div class="row">
@@ -130,8 +127,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>                
             </div>
+
+
+
         </div>
 
 

@@ -24,10 +24,14 @@ public interface BlogPostDaoInterface {
     public List<Post> listPages();
     public List<Post> listPostsForIndex();
     
-    public void addComment(Comment comment);
+    
+    public void deleteCommentsForPost(int postId);
+    public Comment addComment(Comment comment);
     public void deleteComment(int commentId);
     public Comment getComment(int commentId);
+    public void updateComment(Comment comment);
     public List<Comment> listCommentsForPost(int postId);
+    public List<Comment> listAllComments();
     
     public List<Map<String, Object>> getAllTagsAndCount();
     public List<String> getAllTerms(String termType);

@@ -29,12 +29,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
  *
  * @author apprentice
  */
-public class BlogDaoTest {
+public class BlogDaoTestTerry {
 
     private BlogPostDaoInterface dao;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public BlogDaoTest() {
+    public BlogDaoTestTerry() {
     }
 
     @BeforeClass
@@ -97,8 +97,8 @@ public class BlogDaoTest {
         comment.setCommentDate(commentDate.getTime());
 
         comment.setCommentContent("what's up with this site?");
-        comment.setCommentAuthorEmail("bill@bill.com");
-        comment.setCommentAuthorWebsite("http://www.bill.com");
+        comment.setCommentEmail("bill@bill.com");
+        comment.setCommentWebsite("http://www.bill.com");
         comment.setPostId(ps.getPostId());
 
         //add comment

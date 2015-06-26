@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 19, 2015 at 03:40 PM
+-- Generation Time: Jun 26, 2015 at 01:43 PM
 -- Server version: 5.5.43-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.9
 
@@ -29,13 +29,17 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `comments` (
   `comment_id` int(11) NOT NULL AUTO_INCREMENT,
   `post_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `comment_author_name` tinytext NOT NULL,
+  `comment_author_email` varchar(100) NOT NULL,
+  `comment_author_website` varchar(200) DEFAULT NULL,
   `comment_content` text NOT NULL,
   `comment_date` datetime NOT NULL,
+  `comment_status` varchar(20) NOT NULL DEFAULT 'unapproved',
   PRIMARY KEY (`comment_id`),
-  KEY `post_id` (`post_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+  KEY `post_id` (`post_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=187 ;
 
 -- --------------------------------------------------------
 
@@ -52,17 +56,34 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `post_date` datetime NOT NULL,
   PRIMARY KEY (`post_id`),
   KEY `post_user_id` (`post_user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=228 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `posts`
+-- Table structure for table `terms`
 --
 
-INSERT INTO `posts` (`post_id`, `post_user_id`, `post_type`, `post_title`, `post_content`, `post_date`) VALUES
-(15, 1, 'post', 'The world of coding', 'The world of coding is dark and gloomy', '2015-06-19 15:34:52'),
-(16, 1, 'post', 'The world of coding', 'The world of coding is dark and gloomy', '2015-06-19 15:34:53'),
-(17, 1, 'post', 'The world of coding', 'The world of coding is dark and gloomy', '2015-06-19 15:36:23'),
-(19, 1, 'post', 'The world of coding', 'The world of coding is dark and gloomy', '2015-06-19 15:38:50');
+CREATE TABLE IF NOT EXISTS `terms` (
+  `term_id` int(11) NOT NULL AUTO_INCREMENT,
+  `term_name` varchar(50) NOT NULL,
+  `term_type` varchar(50) NOT NULL,
+  PRIMARY KEY (`term_id`),
+  KEY `term_name` (`term_name`,`term_type`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=563 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `terms_posts`
+--
+
+CREATE TABLE IF NOT EXISTS `terms_posts` (
+  `term_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  PRIMARY KEY (`term_id`,`post_id`),
+  KEY `post_id` (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -82,14 +103,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`user_id`, `user_name`, `user_display_name`, `user_password`, `user_role`) VALUES
-(1, 'Zee', 'zed', 'zed', 'admin'),
-(2, 'Zee', 'zeezee', 'zed', 'admin');
-
---
 -- Constraints for dumped tables
 --
 
@@ -97,13 +110,21 @@ INSERT INTO `users` (`user_id`, `user_name`, `user_display_name`, `user_password
 -- Constraints for table `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `posts`
 --
 ALTER TABLE `posts`
   ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`post_user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `terms_posts`
+--
+ALTER TABLE `terms_posts`
+  ADD CONSTRAINT `terms_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`),
+  ADD CONSTRAINT `terms_posts_ibfk_1` FOREIGN KEY (`term_id`) REFERENCES `terms` (`term_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
