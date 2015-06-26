@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -11,9 +12,6 @@
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-        <%-- 
-        Author: terry
-        --%>
         <script src="${pageContext.request.contextPath}/js/tinymce/tinymce.min.js"></script>
         <script type="text/javascript">
             tinymce.init({
@@ -62,59 +60,64 @@
     </head>
     <body>
         <div class="container-fluid">
-            <h1>Admin Portal</h1>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1><a href="${pageContext.request.contextPath}/index">Blog</a> <small>admin portal</small></h1>
+                </div>
+            </div>
             <hr/>
              <div class ="col-sm-2">
                 <ul id="admin-nav" class="nav nav-pills nav-stacked">
                     <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listBlogPosts">Posts</a>
                         <ul class="dropdown-menu">
-                            <li id="all-posts-button"><a href="adminBlogView">All Posts</a></li>
-                            <li id="add-post-button"><a href="addNewPost">Add Post</a></li> 
+                            <li id="all-posts-button"><a href="${pageContext.request.contextPath}/adminBlogView">All Posts</a></li>
+                            <li id="add-post-button"><a href="${pageContext.request.contextPath}/addNewPost">Add Post</a></li> 
                         </ul>
                     </li>
                     <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listStaticPages">Pages</a>
                         <ul class="dropdown-menu">
-                            <li id="all-pages-button"><a href="adminPageView">All Pages</a></li>
-                            <li id="add-static-page-button"><a href="addNewPage">Add Page</a></li>
+                            <li id="all-pages-button"><a href="${pageContext.request.contextPath}/adminPageView">All Pages</a></li>
+                            <li id="add-static-page-button"><a href="${pageContext.request.contextPath}/addNewPage">Add Page</a></li>
                         </ul>
                     </li>
-                    <li id="admin-nav-item" class="dropdown"><a href="#">Comments</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a href="adminCommentView">Comments</a></li>
                 </ul>
             </div>
             <div class="col-sm-10" id="add-post-box">  
 
                 <!-- LEFT COLUMN OF ADD_POST BOX - TEXT EDITOR AND TITLE-->
                 <div id="text-content-box" class="col-sm-9">
-                    <c:set var="type" value="${postType}"/>
+                    <c:set var="type" value="${post.postType}"/>
                     <c:if test="${fn:startsWith(type, 'blog')}">
-                        <h3><strong>Add Blog Post</strong></h3>
+                        <h3><strong>Edit Blog Post</strong></h3>
                     </c:if>
                     <c:if test="${fn:startsWith(type, 'page')}">
-                        <h3><strong>Add Static Page</strong></h3> 
+                        <h3><strong>Edit Static Page</strong></h3> 
                     </c:if>
 
-                    <form class="form-horizontal">  
-                        <input type="hidden" id="postType" name="postType" value="${postType}"/>
+                    <sf:form modelAttribute="post" class="form-horizontal">  
+                        <input type="hidden" id="postId" path="postId" value="${post.postId}"/>
+                        <input type="hidden" id="postType" path="postType" value="${post.postType}"/>
                         <div class="form-group">
                             <div class="col-sm-6">
-                                <input type="text" id="postTitle" name="postTitle" class="form-control" placeholder="Title"/>
+                                <sf:input type="text" id="postTitle" path="postTitle" class="form-control" placeholder="Title"/>
                             </div>
                             <div class="col-sm-6"></div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <textarea name="postContent" class="form-control" rows="20">
-                                </textarea>
+                                <sf:textarea id="postContent" path="postContent" class="form-control" rows="20"></sf:textarea>
                             </div>
                         </div>
-                        <div style="height: 20px;" id="add-confirmation"></div>
+                        <div style="height: 20px;" id="edit-confirmation"></div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <button id="commit" type="button" class="btn btn-default">Commit</button>
+                                <button id="commit" type="button" class="btn btn-default">Edit</button>
                             </div>
                         </div>
-                    </form>
+                    </sf:form>
                 </div>
+                    
                 <!-- RIGHT COLUMN OF ADD_POST BOX-->
                 <div class="col-sm-3">
                     <form id="post-info" action="#" class="form-horizontal">
@@ -159,7 +162,7 @@
                 </div>
             </div>
         </div> 
-        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/addNewPost.js"></script>
+        <script src="${pageContext.request.contextPath}/js/editPost.js"></script>
+        <script src="${pageContext.request.contextPath}/js/functions.js"></script>
     </body>   

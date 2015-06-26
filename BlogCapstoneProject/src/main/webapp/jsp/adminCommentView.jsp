@@ -63,27 +63,28 @@
                             <li id="add-static-page-button"><a href="addNewPage">Add Page</a></li>
                         </ul>
                     </li>
-                   <li id="admin-nav-item" class="dropdown"><a href="adminCommentView">Comments</a></li>
+                    <li id="admin-nav-item" class="dropdown"><a href="adminCommentView">Comments</a></li>
                 </ul>
             </div>
             <div class="col-sm-10" id="admin-view-box">
                 <div class="col-sm-11">
                     <h3 id="table-header"></h3>
-                    <table class="table table-hover" id="posts-table">
-                        <th width="20%">Title</th>
+                    <table class="table table-hover" id="comments-table">
                         <th width="20%">Author</th>
-                        <th width="20%">Status</th>
-                        <th width="20%">Date</th>
+                        <th width="40%">Comment</th>
+                        <th width="10%">Date</th>
+                        <th width="10%">Post</th>
+                        <th width="10%">Status</th>
                         <th width="10%"></th>
-                        <th width="10%"></th>
-                        <tbody id="posts-table-content"></tbody>
+                        <tbody id="comments-table-content"></tbody>
                     </table>
                 </div>
                 <div class="col-sm-1"></div>
             </div>
         </div> 
+        
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/adminBlogView.js"></script>
+        <script src="${pageContext.request.contextPath}/js/adminCommentView.js"></script>
     </body>    
 </html>

@@ -14,26 +14,89 @@ import java.util.Objects;
  */
 public class Comment {
     private int commentId;
+    private String postTitle;
     private int postId;
     private int userId;
+    private String commentWebsite;
+    private String commentStatus;
+    private String commentEmail;
     private String commentContent;
     private String commentAuthorName;
     private Date commentDate;
 
-    public Date getCommentDate() {
-        return commentDate;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + this.commentId;
+        hash = 67 * hash + Objects.hashCode(this.postTitle);
+        hash = 67 * hash + this.postId;
+        hash = 67 * hash + this.userId;
+        hash = 67 * hash + Objects.hashCode(this.commentWebsite);
+        hash = 67 * hash + Objects.hashCode(this.commentStatus);
+        hash = 67 * hash + Objects.hashCode(this.commentEmail);
+        hash = 67 * hash + Objects.hashCode(this.commentContent);
+        hash = 67 * hash + Objects.hashCode(this.commentAuthorName);
+        hash = 67 * hash + Objects.hashCode(this.commentDate);
+        return hash;
     }
 
-    public void setCommentDate(Date commentDate) {
-        this.commentDate = commentDate;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Comment other = (Comment) obj;
+        if (this.commentId != other.commentId) {
+            return false;
+        }
+        if (!Objects.equals(this.postTitle, other.postTitle)) {
+            return false;
+        }
+        if (this.postId != other.postId) {
+            return false;
+        }
+        if (this.userId != other.userId) {
+            return false;
+        }
+        if (!Objects.equals(this.commentWebsite, other.commentWebsite)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentStatus, other.commentStatus)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentEmail, other.commentEmail)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentContent, other.commentContent)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentAuthorName, other.commentAuthorName)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentDate, other.commentDate)) {
+            return false;
+        }
+        return true;
     }
+
     
-        public int getCommentId() {
+    public int getCommentId() {
         return commentId;
     }
 
     public void setCommentId(int commentId) {
         this.commentId = commentId;
+    }
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
     }
 
     public int getPostId() {
@@ -52,6 +115,30 @@ public class Comment {
         this.userId = userId;
     }
 
+    public String getCommentWebsite() {
+        return commentWebsite;
+    }
+
+    public void setCommentWebsite(String commentWebsite) {
+        this.commentWebsite = commentWebsite;
+    }
+
+    public String getCommentStatus() {
+        return commentStatus;
+    }
+
+    public void setCommentStatus(String commentStatus) {
+        this.commentStatus = commentStatus;
+    }
+
+    public String getCommentEmail() {
+        return commentEmail;
+    }
+
+    public void setCommentEmail(String commentEmail) {
+        this.commentEmail = commentEmail;
+    }
+
     public String getCommentContent() {
         return commentContent;
     }
@@ -68,47 +155,17 @@ public class Comment {
         this.commentAuthorName = commentAuthorName;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 13 * hash + this.commentId;
-        hash = 13 * hash + this.postId;
-        hash = 13 * hash + this.userId;
-        hash = 13 * hash + Objects.hashCode(this.commentContent);
-        hash = 13 * hash + Objects.hashCode(this.commentAuthorName);
-        hash = 13 * hash + Objects.hashCode(this.commentDate);
-        return hash;
+    public Date getCommentDate() {
+        return commentDate;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Comment other = (Comment) obj;
-        if (this.commentId != other.commentId) {
-            return false;
-        }
-        if (this.postId != other.postId) {
-            return false;
-        }
-        if (this.userId != other.userId) {
-            return false;
-        }
-        if (!Objects.equals(this.commentContent, other.commentContent)) {
-            return false;
-        }
-        if (!Objects.equals(this.commentAuthorName, other.commentAuthorName)) {
-            return false;
-        }
-        if (!Objects.equals(this.commentDate, other.commentDate)) {
-            return false;
-        }
-        return true;
+    public void setCommentDate(Date commentDate) {
+        this.commentDate = commentDate;
     }
 
+    
+   
+    
+    
     
 }

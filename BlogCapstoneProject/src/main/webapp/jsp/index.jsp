@@ -50,9 +50,9 @@
                             <a href="${pageContext.request.contextPath}/staticPages/{${page.pageId}}">${page.pageName}</a>
                         </li>
                     </c:forEach>
-                </ul>    
+                </ul>
             </div>   
-            <h1>Coding Geekette</h1>  
+            <h1>Blog</h1>  
             <hr/>
         </div>
 
@@ -83,61 +83,61 @@
                                     </div>
                                     <div id="post-content-wrap" class="row">
                                         <div class="col-sm-12">
-                                            <p id="post-content">
-                                                ${post.postContent}
-                                            </p>
+
+                                            ${post.postContent}
                                         </div>
                                     </div>
-                                    <a class="btn btn-primary" href="post/${post.postId}">Read More</a>
                                 </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </div>
-
-
-                <!--RIGHT COLUMN-->
-                <div class="col-sm-2">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h4><strong>Recent Posts</strong></h4>
-                            <hr/>
-                            <div id="recent-posts-body">
-                                <c:forEach var="recentpost" items="${recentPostList}">
-                                </c:forEach>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
+                                <a class="btn btn-primary" href="post/${post.postId}">Read More</a>
                             </div>
                         </div>
+                    </c:forEach>
+                </div>
+            </div>
+
+
+            <!--RIGHT COLUMN-->
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4><strong>Recent Posts</strong></h4>
+                        <hr/>
+                        <div id="recent-posts-body">
+                            <c:forEach var="recentpost" items="${recentPostList}">
+                            </c:forEach>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                            <p>Posts</p>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <hr/>
-                            <h4><strong>Tags</strong></h4>
-                            <hr/>
-                            <div id="tags-body">
-                                <c:forEach var="tag" items="${tags}">
-                                </c:forEach>
-                                <p>Tags</p>
-                                <p>Tags</p>
-                                <p>Tags</p>
-                                <p>Tags</p>
-                                <p>Tags</p>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr/>
+                        <h4><strong>Tags</strong></h4>
+                        <hr/>
+                        <div id="tags-body">
+                            <c:forEach var="tag" items="${tags}">
+                            </c:forEach>
+                            <p>Tags</p>
+                            <p>Tags</p>
+                            <p>Tags</p>
+                            <p>Tags</p>
+                            <p>Tags</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script> 
-    </body>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script> 
+</body>
 </html>
 
