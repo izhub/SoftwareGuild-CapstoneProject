@@ -13,11 +13,14 @@ import java.util.Objects;
  * @author apprentice
  */
 public class Comment {
+
     private int commentId;
     private int postId;
     private int userId;
     private String commentContent;
     private String commentAuthorName;
+    private String commentAuthorEmail;
+    private String commentAuthorWebsite;
     private Date commentDate;
 
     public Date getCommentDate() {
@@ -27,8 +30,8 @@ public class Comment {
     public void setCommentDate(Date commentDate) {
         this.commentDate = commentDate;
     }
-    
-        public int getCommentId() {
+
+    public int getCommentId() {
         return commentId;
     }
 
@@ -68,15 +71,33 @@ public class Comment {
         this.commentAuthorName = commentAuthorName;
     }
 
+    public String getCommentAuthorEmail() {
+        return commentAuthorEmail;
+    }
+
+    public void setCommentAuthorEmail(String commentAuthorEmail) {
+        this.commentAuthorEmail = commentAuthorEmail;
+    }
+
+    public String getCommentAuthorWebsite() {
+        return commentAuthorWebsite;
+    }
+
+    public void setCommentAuthorWebsite(String commentAuthorWebsite) {
+        this.commentAuthorWebsite = commentAuthorWebsite;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 13 * hash + this.commentId;
-        hash = 13 * hash + this.postId;
-        hash = 13 * hash + this.userId;
-        hash = 13 * hash + Objects.hashCode(this.commentContent);
-        hash = 13 * hash + Objects.hashCode(this.commentAuthorName);
-        hash = 13 * hash + Objects.hashCode(this.commentDate);
+        int hash = 5;
+        hash = 19 * hash + this.commentId;
+        hash = 19 * hash + this.postId;
+        hash = 19 * hash + this.userId;
+        hash = 19 * hash + Objects.hashCode(this.commentContent);
+        hash = 19 * hash + Objects.hashCode(this.commentAuthorName);
+        hash = 19 * hash + Objects.hashCode(this.commentAuthorEmail);
+        hash = 19 * hash + Objects.hashCode(this.commentAuthorWebsite);
+        hash = 19 * hash + Objects.hashCode(this.commentDate);
         return hash;
     }
 
@@ -104,11 +125,16 @@ public class Comment {
         if (!Objects.equals(this.commentAuthorName, other.commentAuthorName)) {
             return false;
         }
+        if (!Objects.equals(this.commentAuthorEmail, other.commentAuthorEmail)) {
+            return false;
+        }
+        if (!Objects.equals(this.commentAuthorWebsite, other.commentAuthorWebsite)) {
+            return false;
+        }
         if (!Objects.equals(this.commentDate, other.commentDate)) {
             return false;
         }
         return true;
     }
 
-    
 }

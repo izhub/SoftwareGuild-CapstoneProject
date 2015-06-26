@@ -6,6 +6,7 @@
 package com.swcguild.blogcapstoneproject.dto;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Objects;
  * @author apprentice
  */
 public class Post {
+
     private int postId;
     private int postUserId;
     private String postType;
@@ -89,14 +91,14 @@ public class Post {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 23 * hash + this.postId;
-        hash = 23 * hash + this.postUserId;
-        hash = 23 * hash + Objects.hashCode(this.postType);
-        hash = 23 * hash + Objects.hashCode(this.postTitle);
-        hash = 23 * hash + Objects.hashCode(this.postContent);
-        hash = 23 * hash + Objects.hashCode(this.postDate);
-        hash = 23 * hash + Objects.hashCode(this.postTags);
-        hash = 23 * hash + Objects.hashCode(this.postCategories);
+        hash = 61 * hash + this.postId;
+        hash = 61 * hash + this.postUserId;
+        hash = 61 * hash + Objects.hashCode(this.postType);
+        hash = 61 * hash + Objects.hashCode(this.postTitle);
+        hash = 61 * hash + Objects.hashCode(this.postContent);
+        hash = 61 * hash + Objects.hashCode(this.postDate);
+        hash = 61 * hash + Objects.hashCode(this.postTags);
+        hash = 61 * hash + Objects.hashCode(this.postCategories);
         return hash;
     }
 
@@ -135,4 +137,5 @@ public class Post {
         }
         return true;
     }
+
 }
