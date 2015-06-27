@@ -65,33 +65,23 @@
                         <c:forEach var="post" items="${blogList}">
                             <div class="blog-post row">
                                 <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <h3>${post.postTitle}</h3>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
-                                                <c:forEach var="category" items="${post.postCategories}">  
-                                                    <a href="#">${category}</a> 
-                                                </c:forEach>&nbsp;&nbsp;&nbsp;
-                                                <c:forEach var="tag" items="${post.postTags}"> 
-                                                    <a href="#">${tag}</a>
-                                                </c:forEach>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div id="post-content-wrap" class="row">
-                                        <div class="col-sm-12">
-                                            ${post.postContent}
-                                        </div>
-                                    </div>
+                                    <h3>${post.postTitle}</h3>
+                                    <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
+                                        <c:forEach var="category" items="${post.postCategories}">  
+                                            <a href="#">${category}</a> 
+                                        </c:forEach>&nbsp;&nbsp;&nbsp;
+                                        <c:forEach var="tag" items="${post.postTags}"> 
+                                            <a href="#">${tag}</a>
+                                        </c:forEach>
+                                        ${post.postContent}
+                                    </p>
+                                    <p>
+                                        <a class="btn btn-primary" href="post/${post.postId}">Read More</a>
+                                    </p>
                                 </div>
-                                <a class="btn btn-primary" href="post/${post.postId}">Read More</a>
                             </div>
-                        </div>
-                    </c:forEach>
+                        </c:forEach>
+                    </div>
                 </div>
                 <!--RIGHT COLUMN-->
                 <div class="col-sm-2">
@@ -100,14 +90,11 @@
                             <h4><strong>Recent Posts</strong></h4>
                             <hr/>
                             <div id="recent-posts-body">
-                                <c:forEach var="recentpost" items="${recentPostList}">
-                                </c:forEach>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
-                                <p>Posts</p>
+                                <ul>
+                                    <c:forEach var="recentpost" items="${recentPostList}">
+                                        <li><a href="post/${recentpost.postId}">${recentpost.postTitle}</a></li>
+                                        </c:forEach>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -118,20 +105,16 @@
                             <hr/>
                             <div id="tags-body">
                                 <c:forEach var="tag" items="${tags}">
+                                    <c:set var="fontSize" value="${((tag.term_count/5) * (2 - 0.65)) + 0.65}" />
+                                    <fmt:formatNumber var="fontSize" maxFractionDigits="2" value="${fontSize}" />
+                                    <a href="post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
+                                    &nbsp;
                                 </c:forEach>
-                                <p>Tags</p>
-                                <p>Tags</p>
-                                <p>Tags</p>
-                                <p>Tags</p>
-                                <p>Tags</p>
                             </div>
                         </div>
                     </div>
                 </div>                
             </div>
-
-
-
         </div>
 
 

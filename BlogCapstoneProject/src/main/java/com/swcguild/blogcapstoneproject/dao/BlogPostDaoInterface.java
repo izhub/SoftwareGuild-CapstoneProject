@@ -23,6 +23,7 @@ public interface BlogPostDaoInterface {
     public List<Post> listPosts();
     public List<Post> listPages();
     public List<Post> listPostsForIndex();
+    public List<Post> listRecentPosts();
     
     
     public void deleteCommentsForPost(int postId);
@@ -40,4 +41,6 @@ public interface BlogPostDaoInterface {
     public List<String> getTermsForPost(int postId, String termType);
     public void deleteTermFromPost(int postId);
     public void deleteUnusedTags();
+    
+    public int getUserId(String userName);
 }

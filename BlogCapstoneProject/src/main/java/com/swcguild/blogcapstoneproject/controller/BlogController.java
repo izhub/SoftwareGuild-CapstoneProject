@@ -50,6 +50,8 @@ public class BlogController {
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String homePage(Model model) {
+        model.addAttribute("recentPostList", dao.listRecentPosts());
+        model.addAttribute("tags", dao.getAllTagsAndCount());
         model.addAttribute("blogList", dao.listPostsForIndex());
         return "index";
     }
@@ -144,6 +146,8 @@ public class BlogController {
     @RequestMapping(value = "post/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String displayPostPage(@PathVariable int id, Model model) {
+        model.addAttribute("recentPostList", dao.listRecentPosts());
+        model.addAttribute("tags", dao.getAllTagsAndCount());
         model.addAttribute("post", dao.getPost(id));
         return "staticPage";
     }
@@ -154,7 +158,7 @@ public class BlogController {
         if (post != null) {
             Date date = new Date();
             // we need to get the user that is currently posting
-            post.setPostUserId(2);
+            post.setPostUserId(dao.getUserId("admin"));
             post.setPostDate(date);
 
             dao.addPost(post);
@@ -179,11 +183,17 @@ public class BlogController {
 
     @RequestMapping(value = "addComment", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public String addComment(@ModelAttribute("comment") Comment comment) {
-        Date date = new Date();
-        comment.setCommentDate(date);
-        comment.setUserId(1);
-        dao.addComment(comment);
+    public String addComment(HttpServletRequest req, @ModelAttribute("comment") Comment comment) {
+        boolean validCaptcha = instance.validateResponseForID(req.getSession().getId(), req.getParameter("captcha"));
+
+        if (validCaptcha) {
+            Date date = new Date();
+            comment.setCommentDate(date);
+            // TODO: if there is no userName, we do not need to set userId
+//            comment.setUserId(1);
+            dao.addComment(comment);
+        }
+
         return "redirect:post/" + comment.getPostId();
     }
 
@@ -219,7 +229,7 @@ public class BlogController {
 
     private static ImageCaptchaService instance;
 
-    @RequestMapping(value = "captcha", method = RequestMethod.GET)
+    @RequestMapping(value = "/captcha", method = RequestMethod.GET)
     public void showCaptcha(HttpServletRequest req, HttpServletResponse res) throws IOException {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("jcaptcha.xml");
         instance = ctx.getBean("captchaService", ImageCaptchaService.class);

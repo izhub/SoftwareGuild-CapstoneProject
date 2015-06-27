@@ -110,85 +110,68 @@
                     <div class="col-sm-6">
                         <sf:form modelAttribute="comment" class="form-horizontal" action="${pageContext.request.contextPath}/addComment" method="POST">
                             <div class="form-group">
-
-                                <h4>Comment:</h4>
-
                             </div>
                             <input type="hidden" name="postId" value="${post.postId}"/>
                             <div class="comment-text form-group">
+                                <label for="comment-textarea" class="col-sm-1 control-label">Comment:</label>
                                 <div id="comment-content-box" class="col-sm-offset-2 col-sm-8">
                                     <textarea id="comment-textarea" name="commentContent" cols="50" rows="5"></textarea>
                                 </div>                          
                             </div>
                             <div class="form-group">
                                 <label for="comment-name" class="col-sm-1 control-label">Name</label>
-                                <div class="col-sm-offset-1 col-sm-6">
+                                <div class="col-sm-offset-2 col-sm-6">
                                     <input type="text" name="commentAuthorName" class="form-control" id="comment-name" placeholder="Name"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="comment-email" class="col-sm-1 control-label">Email</label>
-                                <div class="col-sm-offset-1 col-sm-6">
+                                <div class="col-sm-offset-2 col-sm-6">
                                     <input type="email" name="commentEmail" class="form-control" id="comment-email" placeholder="username@example.com"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="comment-website" class="col-sm-1 control-label">Website</label>
-                                <div class="col-sm-offset-1 col-sm-6">
+                                <div class="col-sm-offset-2 col-sm-6">
                                     <input type="text" name="commentWebsite" class="form-control" id="comment-website" placeholder="website"/>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-6">
+                                    <img id="captcha_image" src="${pageContext.request.contextPath}/captcha" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment-captcha" class="col-sm-1 control-label">Captcha</label>
+                                <div class="col-sm-offset-2 col-sm-4">
+                                    <input class="form-control" type="text" name="captcha" />
+                                </div>
+                            </div>
+
 
                             <div class="form-group">
-                                <div  class="col-sm-offset-2 col-sm-2">
+                                <div  class="col-sm-offset-3 col-sm-2">
                                     <button id="comment-submit-button" type="submit" class="btn btn-default">Submit</button>
                                 </div>
                             </div>
                         </sf:form>
                     </div>
                 </div>
-                <div class="row">
-                    <input type="hidden" id="validation" value="${validation}"/>
-                    <form class="form-horizontal" method="post">
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <img id="captcha_image" src="captcha" />
-                                <button class="btn btn-default" id="refreshCaptcha">
-                                    <span class="glyphicon glyphicon-refresh"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-4">
-                                <input class="form-control" type="text" name="captcha" />
-                            </div>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-default" name="Submit">Submit</button>
-                            </div>
-                        </div>
-
-
-                    </form>
-                </div>
             </div>
             <!--END OF LEFT COLUMN-->
 
             <!--RIGHT COLUMN-->
-
             <div class="col-sm-2">
                 <div class="row">
                     <div class="col-sm-12">
                         <h4><strong>Recent Posts</strong></h4>
                         <hr/>
                         <div id="recent-posts-body">
-                            <c:forEach var="recentpost" items="${recentPostList}">
-                            </c:forEach>
-                            <p>Posts</p>
-                            <p>Posts</p>
-                            <p>Posts</p>
-                            <p>Posts</p>
-                            <p>Posts</p>
-                            <p>Posts</p>
+                            <ul>
+                                <c:forEach var="recentpost" items="${recentPostList}">
+                                    <li><a href="post/${recentpost.postId}">${recentpost.postTitle}</a></li>
+                                    </c:forEach>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -199,16 +182,15 @@
                         <hr/>
                         <div id="tags-body">
                             <c:forEach var="tag" items="${tags}">
+                                <c:set var="fontSize" value="${((tag.term_count/5) * (2 - 0.65)) + 0.65}" />
+                                <fmt:formatNumber var="fontSize" maxFractionDigits="2" value="${fontSize}" />
+                                <a href="post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
+                                &nbsp;
                             </c:forEach>
-                            <p>Tags</p>
-                            <p>Tags</p>
-                            <p>Tags</p>
-                            <p>Tags</p>
-                            <p>Tags</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>
 
     </div>

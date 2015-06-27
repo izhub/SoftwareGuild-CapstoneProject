@@ -35,9 +35,11 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_DELETE_POST = "DELETE FROM posts WHERE post_id = ?";
 
-    private final String SQL_SELECT_POST = "SELECT * FROM posts WHERE post_id = ?";
+    private final String SQL_SELECT_POST = "SELECT * FROM posts WHERE post_id = ? AND post_status <> 'draft'";
 
-    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type LIKE 'blog'";
+    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type LIKE 'blog' AND post_status <> 'draft'";
+
+    private final String SQL_SELECT_RECENT_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' ORDER BY post_date DESC LIMIT 5";
 
     private final String SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, user_id, comment_author_name, comment_author_email, comment_content, comment_date, comment_author_website) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -75,12 +77,18 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_DELETE_UNUSED_TAGS = "DELETE FROM terms WHERE term_id NOT IN (SELECT DISTINCT term_id FROM terms_posts)";
 
+    private final String SQL_SELECT_USER_ID_BY_USER_NAME = "SELECT user_id FROM users WHERE user_name = ?";
+
     //2a: Declare JdbcTemplate Reference - the instance will be handed to us by Spring
     private JdbcTemplate jdbcTemplate;
 
     //2b: use Setter Injection to direct Spring to hand us an isntance of JdbcTemplate
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+
+        // creating default users
+//        jdbcTemplate.update("INSERT IGNORE INTO users (user_name, user_display_name, user_password, user_role) VALUES ('admin', 'Administrator', 'password', 'admin')");
+//        jdbcTemplate.update("INSERT IGNORE INTO users (user_name, user_display_name, user_password, user_role) VALUES ('marketing', 'Marketing', 'password', 'marketing')");
     }
 
     @Override
@@ -131,14 +139,25 @@ public class BlogDao implements BlogPostDaoInterface {
             for (int i = 0; i < limit; i++) {
                 exerpt += contentArray[i] + " ";
             }
-            exerpt += "...";
-            
+            if (contentArray.length > 50) {
+                exerpt += "&hellip;";
+            }
+
             post.setPostCategories(StringUtils.collectionToCommaDelimitedString(getTermsForPost(post.getPostId(), "category")));
             post.setPostTags(StringUtils.collectionToCommaDelimitedString(getTermsForPost(post.getPostId(), "tag")));
-            
+
             post.setPostContent(exerpt);
         }
         return posts;
+    }
+
+    @Override
+    public List<Post> listRecentPosts() {
+        try {
+            return jdbcTemplate.query(SQL_SELECT_RECENT_POSTS, new PostMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
@@ -322,6 +341,16 @@ public class BlogDao implements BlogPostDaoInterface {
 
         post.setPostId(jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class));
 
+    }
+
+    @Override
+    public int getUserId(String userName) {
+        try {
+//            return jdbcTemplate.queryForObject(SQL_SELECT_USER_ID_BY_USER_NAME, Integer.class, userName);
+            return 1;
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
     }
 
     private class CommentMapper implements ParameterizedRowMapper<Comment> {
