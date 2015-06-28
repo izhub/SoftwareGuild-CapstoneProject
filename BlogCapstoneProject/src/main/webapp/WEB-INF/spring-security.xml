@@ -15,7 +15,11 @@
     <!-- #2 - Make sure we don’t need authorization to get to the login or home page -->
     <http pattern="/login" security="none" />
     <http pattern="/home" security="none" />
+    <http pattern="/index" security="none" />
+    <http pattern="/captcha" security="none" />
     <http pattern="/" security="none" />
+    <http pattern="/post/**" security="none" />
+    <http pattern="/addComment" security="none" />
     <http pattern="/css/**" security="none" />
     <http pattern="/js/**" security="none" />
     <http pattern="/img/**" security="none" />
@@ -28,15 +32,15 @@
                 login-page="/login"
                 authentication-failure-url="/login?login_error=1"/>
         <!-- #3d - Go back to home page when user logs out -->
-        <logout logout-success-url="/home" />
+        <logout logout-success-url="/index" />
         <!-- #3e - Access to these endpoints require admin role -->
+        <intercept-url pattern="/adminPortal" access="ROLE_ADMIN" />
         <intercept-url pattern="/addNewPost" access="ROLE_ADMIN" />
         <intercept-url pattern="/adminBlogView" access="ROLE_ADMIN" />
         <intercept-url pattern="/adminPageView" access="ROLE_ADMIN" />
         <intercept-url pattern="/editView" access="ROLE_ADMIN" />
-        <intercept-url pattern="/posts/**" access="ROLE_ADMIN" />
         <!-- #3f - Access to all other controller endpoints require user role -->
-        <intercept-url pattern="/**" access="ROLE_USER" />
+        <intercept-url pattern="/**" access="ROLE_ADMIN" />
     </http>
     <!-- #4 - Authentication Manager config -->
     <authentication-manager>
@@ -50,9 +54,9 @@
             <jdbc-user-service id="userService"
                            data-source-ref="dataSource"
                            users-by-username-query=
-          "select username, password, enabled from users where username=?"
+          "select user_name, user_password, enabled from users where user_name=?"
                            authorities-by-username-query=
-          "select username, authority from authorities where username=?" />
+          "select user_name, user_role from users where user_name=?" />
         </authentication-provider>
     </authentication-manager>
 </beans:beans>

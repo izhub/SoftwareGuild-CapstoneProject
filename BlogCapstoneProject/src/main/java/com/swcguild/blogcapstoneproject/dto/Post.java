@@ -19,6 +19,7 @@ public class Post {
     private String postType;
     private String postTitle;
     private String postContent;
+    private String postStatus;
     private Date postDate;
     private String postTags;
     private String postCategories;
@@ -63,6 +64,14 @@ public class Post {
         this.postContent = postContent;
     }
 
+    public String getPostStatus() {
+        return postStatus;
+    }
+
+    public void setPostStatus(String postStatus) {
+        this.postStatus = postStatus;
+    }
+
     public Date getPostDate() {
         return postDate;
     }
@@ -89,15 +98,16 @@ public class Post {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 61 * hash + this.postId;
-        hash = 61 * hash + this.postUserId;
-        hash = 61 * hash + Objects.hashCode(this.postType);
-        hash = 61 * hash + Objects.hashCode(this.postTitle);
-        hash = 61 * hash + Objects.hashCode(this.postContent);
-        hash = 61 * hash + Objects.hashCode(this.postDate);
-        hash = 61 * hash + Objects.hashCode(this.postTags);
-        hash = 61 * hash + Objects.hashCode(this.postCategories);
+        int hash = 7;
+        hash = 71 * hash + this.postId;
+        hash = 71 * hash + this.postUserId;
+        hash = 71 * hash + Objects.hashCode(this.postType);
+        hash = 71 * hash + Objects.hashCode(this.postTitle);
+        hash = 71 * hash + Objects.hashCode(this.postContent);
+        hash = 71 * hash + Objects.hashCode(this.postStatus);
+        hash = 71 * hash + Objects.hashCode(this.postDate);
+        hash = 71 * hash + Objects.hashCode(this.postTags);
+        hash = 71 * hash + Objects.hashCode(this.postCategories);
         return hash;
     }
 
@@ -123,6 +133,9 @@ public class Post {
             return false;
         }
         if (!Objects.equals(this.postContent, other.postContent)) {
+            return false;
+        }
+        if (!Objects.equals(this.postStatus, other.postStatus)) {
             return false;
         }
         if (!Objects.equals(this.postDate, other.postDate)) {

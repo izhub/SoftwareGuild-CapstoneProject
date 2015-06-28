@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,6 +43,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class BlogController {
 
     BlogPostDaoInterface dao;
+    Authentication auth;
+    String loggedInUser;
 
     @Inject
     public BlogController(BlogPostDaoInterface dao) {
@@ -65,6 +69,9 @@ public class BlogController {
     @RequestMapping(value = {"adminPortal", "adminBlogView"}, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String displayAdminPostView() {
+        auth = SecurityContextHolder.getContext().getAuthentication();
+        loggedInUser = auth.getName();
+
         return "adminBlogView";
     }
 
@@ -116,14 +123,14 @@ public class BlogController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Post> getBlogPosts() {
-        return dao.listPosts();
+        return dao.listPosts(loggedInUser);
     }
 
     @RequestMapping(value = "pages", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Post> getStaticPages() {
-        return dao.listPages();
+        return dao.listPages(loggedInUser);
     }
 
     @RequestMapping(value = "post/{id}", method = RequestMethod.PUT)
@@ -134,7 +141,7 @@ public class BlogController {
         List<String> categories = Arrays.asList(post.getPostCategories().split(","));
         List<String> tags = Arrays.asList(post.getPostTags().split(","));
 
-        if (categories.isEmpty()) {
+        if (post.getPostCategories().length() == 0) {
             categories.add("uncategorized");
         }
 
@@ -165,7 +172,7 @@ public class BlogController {
             List<String> categories = Arrays.asList(post.getPostCategories().split(","));
             List<String> tags = Arrays.asList(post.getPostTags().split(","));
 
-            if (categories.isEmpty()) {
+            if (post.getPostCategories().length() == 0) {
                 categories.add("uncategorized");
             }
 

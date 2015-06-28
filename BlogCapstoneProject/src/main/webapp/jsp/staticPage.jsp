@@ -140,6 +140,11 @@
                                 <div class="col-sm-offset-3 col-sm-6">
                                     <img id="captcha_image" src="${pageContext.request.contextPath}/captcha" />
                                 </div>
+                                <div class="col-sm-3">
+                                    <button type="button" class="btn btn-default" id="refreshCaptcha">
+                                        <span class="glyphicon glyphicon-refresh">Refresh Captcha</span>
+                                    </button>   
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="comment-captcha" class="col-sm-1 control-label">Captcha</label>
@@ -169,7 +174,7 @@
                         <div id="recent-posts-body">
                             <ul>
                                 <c:forEach var="recentpost" items="${recentPostList}">
-                                    <li><a href="post/${recentpost.postId}">${recentpost.postTitle}</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/post/${recentpost.postId}">${recentpost.postTitle}</a></li>
                                     </c:forEach>
                             </ul>
                         </div>
@@ -184,7 +189,7 @@
                             <c:forEach var="tag" items="${tags}">
                                 <c:set var="fontSize" value="${((tag.term_count/5) * (2 - 0.65)) + 0.65}" />
                                 <fmt:formatNumber var="fontSize" maxFractionDigits="2" value="${fontSize}" />
-                                <a href="post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
+                                <a href="${pageContext.request.contextPath}/post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
                                 &nbsp;
                             </c:forEach>
                         </div>

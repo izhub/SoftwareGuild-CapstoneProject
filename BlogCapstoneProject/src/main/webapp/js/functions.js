@@ -2,7 +2,8 @@ $('document').ready(function () {
 
     $('#refreshCaptcha').click(function (event) {
         event.preventDefault();
-        $('#captcha_image').attr("src", "captcha");
+        var src =  $('#captcha_image').attr("src");
+        $('#captcha_image').attr("src", src);
     });
 
     // tags stuff

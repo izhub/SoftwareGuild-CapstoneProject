@@ -71,21 +71,7 @@
             </div>
             <hr/>
             <div class ="col-sm-2">
-                <ul id="admin-nav" class="nav nav-pills nav-stacked">
-                    <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listBlogPosts">Posts</a>
-                        <ul class="dropdown-menu">
-                            <li id="all-posts-button"><a href="${pageContext.request.contextPath}/adminBlogView">All Posts</a></li>
-                            <li id="add-post-button"><a href="${pageContext.request.contextPath}/addNewPost">Add Post</a></li> 
-                        </ul>
-                    </li>
-                    <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listStaticPages">Pages</a>
-                        <ul class="dropdown-menu">
-                            <li id="all-pages-button"><a href="${pageContext.request.contextPath}/adminPageView">All Pages</a></li>
-                            <li id="add-static-page-button"><a href="${pageContext.request.contextPath}/addNewPage">Add Page</a></li>
-                        </ul>
-                    </li>
-                    <li id="admin-nav-item" class="dropdown"><a href="adminCommentView">Comments</a></li>
-                </ul>
+                <%@include file="adminMenuFragment.jsp" %>
             </div>
             <div class="col-sm-10" id="add-post-box">  
 
@@ -116,7 +102,8 @@
                             <div style="height: 20px;" id="edit-confirmation"></div>
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <button id="commit" type="button" class="btn btn-default">Edit</button>
+                                    <button id="commit" type="button" class="btn btn-default">Publish</button>
+                                    <button id="draft" type="button" class="btn btn-default">Save as Draft</button>
                                 </div>
                             </div>
                     </sf:form>
@@ -125,7 +112,7 @@
                 <!-- RIGHT COLUMN OF ADD_POST BOX-->
                 <div class="col-sm-3">
                     <div class="row" style="margin-top: 100px">
-                        <span class="text-center"><strong>Status: </strong>Draft</span>
+                        <span class="text-center"><strong>Status: </strong>${post.postStatus}</span>
                     </div>
                     <hr/>
                     <div class="row">

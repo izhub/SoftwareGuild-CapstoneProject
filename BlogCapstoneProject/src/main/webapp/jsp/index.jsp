@@ -92,7 +92,7 @@
                             <div id="recent-posts-body">
                                 <ul>
                                     <c:forEach var="recentpost" items="${recentPostList}">
-                                        <li><a href="post/${recentpost.postId}">${recentpost.postTitle}</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/post/${recentpost.postId}">${recentpost.postTitle}</a></li>
                                         </c:forEach>
                                 </ul>
                             </div>
@@ -107,7 +107,7 @@
                                 <c:forEach var="tag" items="${tags}">
                                     <c:set var="fontSize" value="${((tag.term_count/5) * (2 - 0.65)) + 0.65}" />
                                     <fmt:formatNumber var="fontSize" maxFractionDigits="2" value="${fontSize}" />
-                                    <a href="post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
+                                    <a href="${pageContext.request.contextPath}/post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
                                     &nbsp;
                                 </c:forEach>
                             </div>

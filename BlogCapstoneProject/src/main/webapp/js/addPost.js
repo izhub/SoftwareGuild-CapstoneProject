@@ -4,6 +4,17 @@ $(document).ready(function () {
 
     $('#commit').click(function () {
         event.preventDefault();
+        
+        addPost('publish');
+    });
+    
+    $('#draft').click(function () {
+        event.preventDefault();
+        
+        addPost('draft');
+    });
+    
+    function addPost(status) {
         var tinymce_editor_id = tinymce.editors[0].id;
 
         // get only the checked categories
@@ -22,6 +33,7 @@ $(document).ready(function () {
                 postContent: tinymce.get(tinymce_editor_id).getContent(),
                 postType: $('#postType').val(),
                 postCategories: checkedCategories.toString(),
+                postStatus: status,
                 postTags: tags.toString()
             }),
             headers: {
@@ -47,7 +59,7 @@ $(document).ready(function () {
         $('#tagList').empty();
         $('#categoryList').empty();
         $('#add-confirmation').empty();
-    });
+    }
 
     // JQuery and JavaScript stuffs for tags and categories
 

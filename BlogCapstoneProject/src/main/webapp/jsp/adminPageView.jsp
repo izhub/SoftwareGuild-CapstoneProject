@@ -50,21 +50,7 @@
             </div>
             <hr/>
             <div class ="col-sm-2">
-                <ul id="admin-nav" class="nav nav-pills nav-stacked">
-                    <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listBlogPosts">Posts</a>
-                        <ul class="dropdown-menu">
-                            <li id="all-posts-button"><a href="${pageContext.request.contextPath}/adminBlogView">All Posts</a></li>
-                            <li id="add-post-button"><a href="${pageContext.request.contextPath}/addNewPost">Add Post</a></li> 
-                        </ul>
-                    </li>
-                    <li id="admin-nav-item" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="listStaticPages">Pages</a>
-                        <ul class="dropdown-menu">
-                            <li id="all-pages-button"><a href="adminBlogView">All Pages</a></li>
-                            <li id="add-static-page-button"><a href="addNewPage">Add Page</a></li>
-                        </ul>
-                    </li>
-                    <li id="admin-nav-item" class="dropdown"><a href="adminCommentView">Comments</a></li>
-                </ul>
+                <%@include file="adminMenuFragment.jsp" %>
             </div>
             <div class="col-sm-10" id="admin-view-box">
                 <div class="col-sm-11">

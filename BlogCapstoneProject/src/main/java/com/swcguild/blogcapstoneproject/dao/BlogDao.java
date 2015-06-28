@@ -28,18 +28,20 @@ import org.springframework.util.StringUtils;
  */
 public class BlogDao implements BlogPostDaoInterface {
 
-    private final String SQL_INSERT_POST = "INSERT INTO posts (post_user_id, post_type, post_title, post_content, post_date) "
-            + "VALUES (?, ?, ?, ?, ?)";
+    private final String SQL_INSERT_POST = "INSERT INTO posts (post_user_id, post_type, post_title, post_content, post_status, post_date) "
+            + "VALUES (?, ?, ?, ?, ?, ?)";
 
-    private final String SQL_UPDATE_POST = "UPDATE posts SET post_type = ?, post_title = ?, post_content=? WHERE post_id = ?";
+    private final String SQL_UPDATE_POST = "UPDATE posts SET post_type = ?, post_title = ?, post_content=? post_status=? WHERE post_id = ?";
 
     private final String SQL_DELETE_POST = "DELETE FROM posts WHERE post_id = ?";
 
-    private final String SQL_SELECT_POST = "SELECT * FROM posts WHERE post_id = ? AND post_status <> 'draft'";
+    private final String SQL_SELECT_POST = "SELECT * FROM posts WHERE post_id = ?";
 
-    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type LIKE 'blog' AND post_status <> 'draft'";
+    private final String SQL_ADMIN_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog'";
+    
+    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft'";
 
-    private final String SQL_SELECT_RECENT_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' ORDER BY post_date DESC LIMIT 5";
+    private final String SQL_SELECT_RECENT_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft' ORDER BY post_date DESC LIMIT 5";
 
     private final String SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, user_id, comment_author_name, comment_author_email, comment_content, comment_date, comment_author_website) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -54,7 +56,9 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_LIST_COMMENTS_BY_POST_ID = "SELECT * FROM comments WHERE post_id = ?";
 
-    private final String SQL_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type LIKE 'page'";
+    private final String SQL_ADMIN_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type = 'page'";
+    
+    private final String SQL_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type = 'page' AND post_status <> 'draft'";
 
     private final String SQL_LIST_ALL_COMMENTS = "SELECT * FROM comments";
 
@@ -104,7 +108,7 @@ public class BlogDao implements BlogPostDaoInterface {
 
     @Override
     public void updatePost(Post post, int postId) {
-        jdbcTemplate.update(SQL_UPDATE_POST, post.getPostType(), post.getPostTitle(), post.getPostContent(), postId);
+        jdbcTemplate.update(SQL_UPDATE_POST, post.getPostType(), post.getPostTitle(), post.getPostContent(), post.getPostStatus(), postId);
     }
 
     @Override
@@ -122,8 +126,12 @@ public class BlogDao implements BlogPostDaoInterface {
     }
 
     @Override
-    public List<Post> listPosts() {
-        return jdbcTemplate.query(SQL_LIST_BLOG_POSTS, new PostMapper());
+    public List<Post> listPosts(String loggedInUser) {
+        if (loggedInUser.equals("admin")) {
+            return jdbcTemplate.query(SQL_ADMIN_LIST_BLOG_POSTS, new PostMapper());
+        } else {
+            return jdbcTemplate.query(SQL_LIST_BLOG_POSTS, new PostMapper());
+        }
     }
 
 //     limit to 5 posts per page?
@@ -161,8 +169,12 @@ public class BlogDao implements BlogPostDaoInterface {
     }
 
     @Override
-    public List<Post> listPages() {
-        return jdbcTemplate.query(SQL_LIST_STATIC_PAGES, new PostMapper());
+    public List<Post> listPages(String loggedInUser) {
+        if (loggedInUser.equals("admin")) {
+            return jdbcTemplate.query(SQL_ADMIN_LIST_STATIC_PAGES, new PostMapper());
+        } else {
+            return jdbcTemplate.query(SQL_LIST_STATIC_PAGES, new PostMapper());
+        }
     }
 
     @Override
@@ -336,6 +348,7 @@ public class BlogDao implements BlogPostDaoInterface {
                 post.getPostType(),
                 post.getPostTitle(),
                 post.getPostContent(),
+                post.getPostStatus(),
                 post.getPostDate()
         );
 
@@ -385,6 +398,7 @@ public class BlogDao implements BlogPostDaoInterface {
             post.setPostType(rs.getString("post_type"));
             post.setPostTitle(rs.getString("post_title"));
             post.setPostContent(rs.getString("post_content"));
+            post.setPostStatus(rs.getString("post_status"));
             post.setPostDate(postDate);
             return post;
         }

@@ -3,6 +3,17 @@ $(document).ready(function () {
 
     $('#commit').click(function () {
         event.preventDefault();
+
+        editPost('publish');
+    });
+
+    $('#draft').click(function () {
+       event.preventDefault();
+       
+       editPost('draft');
+    });
+
+    function editPost(status) {
         var tinymce_editor_id = tinymce.editors[0].id;
 
         // get only the checked categories
@@ -22,6 +33,7 @@ $(document).ready(function () {
                 postContent: tinymce.get(tinymce_editor_id).getContent(),
                 postType: $('#postType').val(),
                 postCategories: checkedCategories.toString(),
+                postStatus: status,
                 postTags: tags.toString()
             }),
             headers: {
@@ -44,10 +56,11 @@ $(document).ready(function () {
                 }
             }
         });
-    });
-    $('#tagList').empty();
-    $('#categoryList').empty();
-    $('#add-confirmation').empty();
+        $('#tagList').empty();
+        $('#categoryList').empty();
+        $('#add-confirmation').empty();
+    }
+
 
     // tags stuff
     $('#addTag').click(function (event) {
