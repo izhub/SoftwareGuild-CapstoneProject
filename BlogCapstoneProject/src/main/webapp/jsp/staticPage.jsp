@@ -142,7 +142,7 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <button type="button" class="btn btn-default" id="refreshCaptcha">
-                                        <span class="glyphicon glyphicon-refresh">Refresh Captcha</span>
+                                        <span class="glyphicon glyphicon-refresh"></span>
                                     </button>   
                                 </div>
                             </div>

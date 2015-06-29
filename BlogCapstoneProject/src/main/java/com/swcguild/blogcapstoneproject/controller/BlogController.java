@@ -47,10 +47,12 @@ public class BlogController {
     BlogPostDaoInterface dao;
     Authentication auth;
     String loggedInUser;
+    int countPublishedPosts;
 
     @Inject
     public BlogController(BlogPostDaoInterface dao) {
         this.dao = dao;
+        countPublishedPosts = dao.countPublishedPosts();
     }
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
@@ -58,7 +60,26 @@ public class BlogController {
     public String homePage(Model model) {
         model.addAttribute("recentPostList", dao.listRecentPosts());
         model.addAttribute("tags", dao.getAllTagsAndCount());
-        model.addAttribute("blogList", dao.listPostsForIndex());
+        model.addAttribute("blogList", dao.listPostsForIndex(0));
+        model.addAttribute("currentPage", 0);
+        
+        int numPages = (int) Math.ceil(countPublishedPosts / 5);
+        model.addAttribute("numPages", numPages);
+        return "index";
+    }
+    
+    @RequestMapping(value = "/page/{page}", method = RequestMethod.GET)
+    public String homePageOffset(Model model, @PathVariable("page") int page) {
+        model.addAttribute("recentPostList", dao.listRecentPosts());
+        model.addAttribute("tags", dao.getAllTagsAndCount());
+        model.addAttribute("currentPage", page);
+        
+        int numPages = (int) Math.ceil(countPublishedPosts / 5);
+        model.addAttribute("numPages", numPages);
+        
+        int offset = page * 5;
+        
+        model.addAttribute("blogList", dao.listPostsForIndex(offset));
         return "index";
     }
 

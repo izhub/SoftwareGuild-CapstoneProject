@@ -22,7 +22,8 @@ public interface BlogPostDaoInterface {
     public Post getPost(int postId);
     public List<Post> listPosts(String loggedInUser);
     public List<Post> listPages(String loggedInUser);
-    public List<Post> listPostsForIndex();
+    public List<Post> listPostsForIndex(int offset);
+    public int countPublishedPosts();
     public List<Post> listRecentPosts();
     
     

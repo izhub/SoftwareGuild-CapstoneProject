@@ -40,6 +40,10 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_ADMIN_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog'";
     
     private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft'";
+    
+    private final String SQL_COUNT_PUBLISHED_POSTS = "SELECT COUNT(post_id) FROM posts WHERE post_type = 'blog' AND post_status <> 'draft'";
+    
+    private final String SQL_LIST_BLOG_POSTS_FOR_INDEX = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft' LIMIT 5 OFFSET ?";
 
     private final String SQL_SELECT_RECENT_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft' ORDER BY post_date DESC LIMIT 5";
 
@@ -136,8 +140,8 @@ public class BlogDao implements BlogPostDaoInterface {
 
 //     limit to 5 posts per page?
     @Override
-    public List<Post> listPostsForIndex() {
-        List<Post> posts = jdbcTemplate.query(SQL_LIST_BLOG_POSTS, new PostMapper());
+    public List<Post> listPostsForIndex(int offset) {
+        List<Post> posts = jdbcTemplate.query(SQL_LIST_BLOG_POSTS_FOR_INDEX, new PostMapper(), offset);
 
         for (Post post : posts) {
             String[] contentArray = post.getPostContent().split(" ");
@@ -157,6 +161,11 @@ public class BlogDao implements BlogPostDaoInterface {
             post.setPostContent(exerpt);
         }
         return posts;
+    }
+    
+    @Override
+    public int countPublishedPosts() {
+        return jdbcTemplate.queryForObject(SQL_COUNT_PUBLISHED_POSTS, Integer.class);
     }
 
     @Override

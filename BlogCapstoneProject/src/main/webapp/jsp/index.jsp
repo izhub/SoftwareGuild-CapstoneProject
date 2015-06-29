@@ -76,11 +76,61 @@
                                         ${post.postContent}
                                     </p>
                                     <p>
-                                        <a class="btn btn-primary" href="post/${post.postId}">Read More</a>
+                                        <a class="btn btn-primary" href="${pageContext.request.contextPath}/post/${post.postId}">Read More</a>
                                     </p>
                                 </div>
                             </div>
                         </c:forEach>
+                    </div>
+                    <div class="text-center">
+                        <nav>
+                            <ul class="pagination">
+                                <c:choose>
+                                    <c:when test="${currentPage > 0}">
+                                        <c:set var="previousPage" value="${currentPage - 1}" />
+                                        <li>
+                                            <a href="${pageContext.request.contextPath}/page/${previousPage}">
+                                                <span>&laquo;</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="disabled">
+                                            <span>&laquo;</span>
+                                        </li>
+                                    </c:otherwise>
+                                </c:choose>
+
+                                <c:forEach begin="0" end="${numPages}" varStatus="page">
+                                    <c:set var="pageNumber" value="${page.index + 1}" />
+
+                                    <c:choose>
+                                        <c:when test="${currentPage == page.index}">
+                                            <li class="active"><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+
+                                <c:choose>
+                                    <c:when test="${currentPage < numPages}">
+                                        <c:set var="nextPage" value="${currentPage + 1}" />
+                                        <li>
+                                            <a href="${pageContext.request.contextPath}/page/${nextPage}">
+                                                <span>&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="disabled">
+                                            <span>&raquo;</span>
+                                        </li>
+                                    </c:otherwise>
+                                </c:choose>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
                 <!--RIGHT COLUMN-->

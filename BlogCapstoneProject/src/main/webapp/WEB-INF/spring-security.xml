@@ -19,6 +19,7 @@
     <http pattern="/captcha" security="none" />
     <http pattern="/" security="none" />
     <http pattern="/post/**" security="none" />
+    <http pattern="/page/**" security="none" />
     <http pattern="/addComment" security="none" />
     <http pattern="/css/**" security="none" />
     <http pattern="/js/**" security="none" />
