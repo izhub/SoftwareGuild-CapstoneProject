@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    populateTagsAndCategories();
+//    populateTagsAndCategories();
 
     $('#commit').click(function () {
         event.preventDefault();

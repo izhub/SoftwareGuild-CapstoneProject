@@ -12,6 +12,7 @@ import com.swcguild.blogcapstoneproject.dto.Post;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -138,11 +139,13 @@ public class BlogController {
     public void updatePost(@RequestBody Post post) {
         dao.updatePost(post, post.getPostId());
         dao.deleteTermFromPost(post.getPostId());
-        List<String> categories = Arrays.asList(post.getPostCategories().split(","));
+        List<String> categories = new ArrayList<>();
         List<String> tags = Arrays.asList(post.getPostTags().split(","));
 
         if (post.getPostCategories().length() == 0) {
             categories.add("uncategorized");
+        } else {
+            categories = Arrays.asList(post.getPostCategories().split(","));
         }
 
         dao.addTerms(categories, tags);
@@ -169,11 +172,13 @@ public class BlogController {
             post.setPostDate(date);
 
             dao.addPost(post);
-            List<String> categories = Arrays.asList(post.getPostCategories().split(","));
+            List<String> categories = new ArrayList<>();
             List<String> tags = Arrays.asList(post.getPostTags().split(","));
 
             if (post.getPostCategories().length() == 0) {
                 categories.add("uncategorized");
+            } else {
+                categories = Arrays.asList(post.getPostCategories().split(","));
             }
 
             dao.addTerms(categories, tags);

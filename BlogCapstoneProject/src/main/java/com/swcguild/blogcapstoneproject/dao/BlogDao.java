@@ -31,7 +31,7 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_INSERT_POST = "INSERT INTO posts (post_user_id, post_type, post_title, post_content, post_status, post_date) "
             + "VALUES (?, ?, ?, ?, ?, ?)";
 
-    private final String SQL_UPDATE_POST = "UPDATE posts SET post_type = ?, post_title = ?, post_content=? post_status=? WHERE post_id = ?";
+    private final String SQL_UPDATE_POST = "UPDATE posts SET post_type = ?, post_title = ?, post_content=?, post_status=? WHERE post_id = ?";
 
     private final String SQL_DELETE_POST = "DELETE FROM posts WHERE post_id = ?";
 

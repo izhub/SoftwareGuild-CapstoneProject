@@ -22,7 +22,7 @@
                 theme: 'modern',
                 skin: 'light'
             });
-            
+
             // category and tags array
             var categories = [];
             var tags = [];
@@ -108,7 +108,7 @@
                             </div>
                     </sf:form>
                 </div>
-                    
+
                 <!-- RIGHT COLUMN OF ADD_POST BOX-->
                 <div class="col-sm-3">
                     <div class="row" style="margin-top: 100px">
@@ -119,10 +119,14 @@
                         <form class="form-horizontal">
                             <h5 class="text-center"><strong>Categories</strong></h5>
                             <div id="categoryList" class="col-sm-11" style="height:100px; overflow:auto; margin-bottom: 10px">
-                                <c:forEach var="category" items="${categoryList}">
-                                    <c:set var="categoryId" value="${fn:toLowerCase(category)}" />
-                                    <br /><input type="checkbox" id="${categoryId}" name="${categoryId}" checked="checked"> ${category}</input>
-                                </c:forEach>
+                                <c:if test="${not empty categoryList}">
+                                    <c:forEach var="category" items="${categoryList}">
+                                        <c:if test="${not empty category}">
+                                            <c:set var="categoryId" value="${fn:toLowerCase(category)}" />
+                                            <br /><input type="checkbox" id="${categoryId}" name="${categoryId}" checked="checked"> ${category}</input>
+                                        </c:if>
+                                    </c:forEach>
+                                </c:if>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-9">
@@ -147,16 +151,17 @@
                                 </div>
                             </div>
                             <div id="tagList" class="col-sm-11" style="height:100px; overflow:auto; margin-top: 10px">
-                                <c:forEach var="tag" items="${tagList}" varStatus="item">
-
-                                    <span class="tag">
-                                        <button type="button" class="btnTag btn btn-default btn-xs" style="margin-top: 2px" value="${item.index}">
-                                            <span id="${item.index}" class="glyphicon glyphicon-remove"></span> ${tag}
-                                        </button>
-                                    </span>
-
-                                </c:forEach>
-
+                                <c:if test="${not empty tagList}">
+                                    <c:forEach var="tag" items="${tagList}" varStatus="item">
+                                        <c:if test="${not empty tag}">
+                                            <span class="tag">
+                                                <button type="button" class="btnTag btn btn-default btn-xs" style="margin-top: 2px" value="${item.index}">
+                                                    <span id="${item.index}" class="glyphicon glyphicon-remove"></span> ${tag}
+                                                </button>
+                                            </span>
+                                        </c:if>
+                                    </c:forEach>
+                                </c:if>
                             </div>
                         </form>
                     </div>
