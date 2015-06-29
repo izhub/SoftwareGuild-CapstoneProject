@@ -105,9 +105,9 @@
                     </div>-->
                     </div>
                 </div>
-                <div id="comments"></div>
                 <div class="row" id="add-comment-row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6"> 
+                        <c:out value="${message}" />
                         <sf:form modelAttribute="comment" class="form-horizontal" action="${pageContext.request.contextPath}/addComment" method="POST">
                             <div class="form-group">
                             </div>

@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -195,15 +196,16 @@ public class BlogController {
 
     @RequestMapping(value = "addComment", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public String addComment(HttpServletRequest req, @ModelAttribute("comment") Comment comment) {
+    public String addComment(HttpServletRequest req, @ModelAttribute("comment") Comment comment, RedirectAttributes redir) {
         boolean validCaptcha = instance.validateResponseForID(req.getSession().getId(), req.getParameter("captcha"));
 
         if (validCaptcha) {
             Date date = new Date();
             comment.setCommentDate(date);
-            // TODO: if there is no userName, we do not need to set userId
-//            comment.setUserId(1);
             dao.addComment(comment);
+            redir.addFlashAttribute("message", "Comment added. Waiting for approval");
+        } else {
+            redir.addFlashAttribute("message", "Invalid Captcha");
         }
 
         return "redirect:post/" + comment.getPostId();
