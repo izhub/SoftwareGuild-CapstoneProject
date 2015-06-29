@@ -342,6 +342,7 @@ public class BlogDao implements BlogPostDaoInterface {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void addPost(Post post) {
         jdbcTemplate.update(SQL_INSERT_POST,
                 post.getPostUserId(),
@@ -353,7 +354,6 @@ public class BlogDao implements BlogPostDaoInterface {
         );
 
         post.setPostId(jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class));
-
     }
 
     @Override
