@@ -25,6 +25,7 @@ public interface BlogPostDaoInterface {
     public List<Post> listPostsForIndex(int offset);
     public int countPublishedPosts();
     public List<Post> listRecentPosts();
+    public List<Post> listPostsByTerm(String termName); 
     
     
     public void deleteCommentsForPost(int postId);

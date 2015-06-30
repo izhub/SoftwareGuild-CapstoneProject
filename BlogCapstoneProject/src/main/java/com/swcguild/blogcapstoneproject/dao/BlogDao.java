@@ -39,13 +39,13 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_ADMIN_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog'";
     
-    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft'";
+    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish'";
     
-    private final String SQL_COUNT_PUBLISHED_POSTS = "SELECT COUNT(post_id) FROM posts WHERE post_type = 'blog' AND post_status <> 'draft'";
+    private final String SQL_COUNT_PUBLISHED_POSTS = "SELECT COUNT(post_id) FROM posts WHERE post_type = 'blog' AND post_status = 'publish'";
     
-    private final String SQL_LIST_BLOG_POSTS_FOR_INDEX = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft' LIMIT 5 OFFSET ?";
+    private final String SQL_LIST_BLOG_POSTS_FOR_INDEX = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish' LIMIT 5 OFFSET ?";
 
-    private final String SQL_SELECT_RECENT_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status <> 'draft' ORDER BY post_date DESC LIMIT 5";
+    private final String SQL_SELECT_RECENT_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 5";
 
     private final String SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, user_id, comment_author_name, comment_author_email, comment_content, comment_date, comment_author_website) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -62,7 +62,7 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_ADMIN_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type = 'page'";
     
-    private final String SQL_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type = 'page' AND post_status <> 'draft'";
+    private final String SQL_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type = 'page' AND post_status = 'publish'";
 
     private final String SQL_LIST_ALL_COMMENTS = "SELECT * FROM comments";
 
@@ -71,6 +71,8 @@ public class BlogDao implements BlogPostDaoInterface {
             + "WHERE t.term_type = 'tag' GROUP BY tp.term_id, t.term_name";
 
     private final String SQL_SELECT_ALL_TERMS_BY_TYPE = "SELECT term_name FROM terms WHERE term_type = ?";
+    
+    private final String SQL_SELECT_POSTS_BY_TERM = "select * from posts as p join terms_posts as tp on p.post_id = tp.post_id join terms as t on tp.term_id = t.term_id where term_name = ?";
 
     private final String SQL_INSERT_TERM = "INSERT INTO terms (term_name, term_type) VALUES (?, ?)";
 
@@ -136,6 +138,11 @@ public class BlogDao implements BlogPostDaoInterface {
         } else {
             return jdbcTemplate.query(SQL_LIST_BLOG_POSTS, new PostMapper());
         }
+    }
+    
+    @Override
+    public List<Post> listPostsByTerm(String termName) {
+        return jdbcTemplate.query(SQL_SELECT_POSTS_BY_TERM, new PostMapper(), termName);
     }
 
 //     limit to 5 posts per page?
