@@ -72,7 +72,8 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_SELECT_ALL_TERMS_BY_TYPE = "SELECT term_name FROM terms WHERE term_type = ?";
     
-    private final String SQL_SELECT_POSTS_BY_TERM = "select * from posts as p join terms_posts as tp on p.post_id = tp.post_id join terms as t on tp.term_id = t.term_id where term_name = ?";
+    private final String SQL_SELECT_POSTS_BY_TERM = "select * from posts as p join terms_posts as tp on p.post_id = tp.post_id join terms as t on tp.term_id = t.term_id where term_name = ? "
+            + "AND post_type = 'blog' AND post_status = 'publish'";
 
     private final String SQL_INSERT_TERM = "INSERT INTO terms (term_name, term_type) VALUES (?, ?)";
 
