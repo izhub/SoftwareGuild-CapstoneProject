@@ -43,6 +43,7 @@ public interface BlogPostDaoInterface {
     public List<String> getTermsForPost(int postId, String termType);
     public void deleteTermFromPost(int postId);
     public void deleteUnusedTags();
+    public List<String> getTermsByType(String type);
     
     public int getUserId(String userName);
 }

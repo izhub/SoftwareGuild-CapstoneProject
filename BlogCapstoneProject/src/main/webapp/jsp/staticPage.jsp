@@ -24,7 +24,7 @@
                 margin-top: 20px;
                 border-radius: 5px;
             }
-            h1, h4, h5 {
+            h1, h2, h3, h4, h5 {
                 margin-left: 10px;
                 font-family: "Times New Roman", "Times", serif;
                 font-weight: bold;
@@ -84,10 +84,10 @@
                         <input type="hidden" id="postId" value="${post.postId}"/>
                         <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
                             <c:forEach var="category" items="${post.postCategories}">  
-                                <a href="#">${category}</a> 
+                                <a href="${pageContext.request.contextPath}/category/${category}">${category}</a> 
                             </c:forEach>&nbsp;&nbsp;&nbsp;
                             <c:forEach var="tag" items="${post.postTags}"> 
-                                <a href="#">${tag}</a>
+                                <a href="${pageContext.request.contextPath}/tag/${tag}">${tag}</a>
                             </c:forEach>
                         </p>
                         <div class="post-body">
@@ -189,7 +189,7 @@
                             <c:forEach var="tag" items="${tags}">
                                 <c:set var="fontSize" value="${((tag.term_count/5) * (2 - 0.65)) + 0.65}" />
                                 <fmt:formatNumber var="fontSize" maxFractionDigits="2" value="${fontSize}" />
-                                <a href="${pageContext.request.contextPath}/post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
+                                <a href="${pageContext.request.contextPath}/tag/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
                                 &nbsp;
                             </c:forEach>
                         </div>

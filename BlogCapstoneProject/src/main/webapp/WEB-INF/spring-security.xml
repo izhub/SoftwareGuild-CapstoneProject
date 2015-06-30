@@ -24,6 +24,8 @@
     <http pattern="/css/**" security="none" />
     <http pattern="/js/**" security="none" />
     <http pattern="/img/**" security="none" />
+    <http pattern="/tag/**" security="none"/>
+    <http pattern="/category/**" security="none"/>
     <!-- #3 - Authentication/login form and protected endpoint configuration --> 
     <http auto-config="true" use-expressions="false">
         <!-- #3a - Login via html form, use Spring to do the security check --> 

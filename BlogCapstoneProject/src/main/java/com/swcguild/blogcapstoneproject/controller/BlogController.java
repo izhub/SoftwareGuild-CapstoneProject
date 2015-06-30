@@ -60,26 +60,12 @@ public class BlogController {
     public String homePage(Model model) {
         model.addAttribute("recentPostList", dao.listRecentPosts());
         model.addAttribute("tags", dao.getAllTagsAndCount());
+        model.addAttribute("categories", dao.getTermsByType("category"));
         model.addAttribute("blogList", dao.listPostsForIndex(0));
         model.addAttribute("currentPage", 0);
-        
+
         int numPages = (int) Math.ceil(countPublishedPosts / 5);
         model.addAttribute("numPages", numPages);
-        return "index";
-    }
-    
-    @RequestMapping(value = "/page/{page}", method = RequestMethod.GET)
-    public String homePageOffset(Model model, @PathVariable("page") int page) {
-        model.addAttribute("recentPostList", dao.listRecentPosts());
-        model.addAttribute("tags", dao.getAllTagsAndCount());
-        model.addAttribute("currentPage", page);
-        
-        int numPages = (int) Math.ceil(countPublishedPosts / 5);
-        model.addAttribute("numPages", numPages);
-        
-        int offset = page * 5;
-        
-        model.addAttribute("blogList", dao.listPostsForIndex(offset));
         return "index";
     }
 
@@ -98,6 +84,13 @@ public class BlogController {
         return "adminBlogView";
     }
 
+    @RequestMapping(value = "adminPageView", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String displayAdminPageView() {
+        return "adminPageView";
+    }
+
+    ///PAGES AND POSTS ENDPOINTS///
     @RequestMapping(value = "addNewPost", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String displayAddNewPost(Model model) {
@@ -106,17 +99,21 @@ public class BlogController {
         return "addPost";
     }
 
-    @RequestMapping(value = "adminPageView", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public String displayAdminPageView() {
-        return "adminPageView";
-    }
-
     @RequestMapping(value = "addNewPage", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String displayAddNewPage(Model model) {
         model.addAttribute("postType", "page");
         return "addPost";
+    }
+    
+    @RequestMapping(value = "category/{category}", method=RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String getPostsForCategory(@PathVariable("category") String category, Model model) {
+        model.addAttribute("blogList", dao.listPostsByTerm(category));
+        model.addAttribute("recentPostList", dao.listRecentPosts());
+        model.addAttribute("tags", dao.getAllTagsAndCount());
+        model.addAttribute("categories", dao.getTermsByType("category"));
+        return "index";
     }
 
     @RequestMapping(value = "displayEditView/{id}", method = RequestMethod.GET)
@@ -130,16 +127,32 @@ public class BlogController {
         return "editPost";
     }
 
-    @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deletePost(@PathVariable int id) {
-        dao.deletePost(id);
+    @RequestMapping(value = "/page/{page}", method = RequestMethod.GET)
+    public String homePageOffset(Model model, @PathVariable("page") int page) {
+        model.addAttribute("recentPostList", dao.listRecentPosts());
+        model.addAttribute("tags", dao.getAllTagsAndCount());
+        model.addAttribute("currentPage", page);
+
+        int numPages = (int) Math.ceil(countPublishedPosts / 5);
+        model.addAttribute("numPages", numPages);
+
+        int offset = page * 5;
+
+        model.addAttribute("blogList", dao.listPostsForIndex(offset));
+        return "index";
     }
 
     @RequestMapping(value = "page/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deletePage(@PathVariable int id) {
         dao.deletePost(id);
+    }
+
+    @RequestMapping(value = "pages", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Post> getStaticPages() {
+        return dao.listPages(loggedInUser);
     }
 
     @RequestMapping(value = "posts", method = RequestMethod.GET)
@@ -149,11 +162,22 @@ public class BlogController {
         return dao.listPosts(loggedInUser);
     }
 
-    @RequestMapping(value = "pages", method = RequestMethod.GET)
+    @RequestMapping(value = "tag/{term}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public List<Post> getStaticPages() {
-        return dao.listPages(loggedInUser);
+    public String getPostsByTerm(@PathVariable("term") String term, Model model) {
+        model.addAttribute("tagView", 1);
+        model.addAttribute("term", term);
+        model.addAttribute("recentPostList", dao.listRecentPosts());
+        model.addAttribute("tags", dao.getAllTagsAndCount());
+        model.addAttribute("categories", dao.getTermsByType("category"));
+        model.addAttribute("blogList", dao.listPostsByTerm(term));
+        return "index";
+    }
+
+    @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable int id) {
+        dao.deletePost(id);
     }
 
     @RequestMapping(value = "post/{id}", method = RequestMethod.PUT)
@@ -209,6 +233,7 @@ public class BlogController {
         }
     }
 
+    ///COMMENT ENDPOINTS///
     @RequestMapping(value = "adminCommentView", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String displayAdminCommentPage() {

@@ -21,7 +21,7 @@
                 margin-bottom: 10px;
                 border-radius: 5px;
             }
-            h1  {
+            h1, h2, h3, h4  {
                 margin-left: 10px;
                 font-family: "Times New Roman", "Times", serif;
                 font-weight: bold;
@@ -44,10 +44,10 @@
         <div id="header" class="container">
             <div class="navbar">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li>
-                        <c:forEach var="page" items="${staticPages}">
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/index">Home</a></li>
+                        <c:forEach var="category" items="${categories}">
                         <li role="presentation">
-                            <a href="${pageContext.request.contextPath}/staticPages/{${page.pageId}}">${page.pageName}</a>
+                            <a href="${pageContext.request.contextPath}/category/${category}">${category}</a>
                         </li>
                     </c:forEach>
                 </ul>
@@ -58,114 +58,123 @@
 
 
         <div class="container">
-            <div class="row">
-                <!--POST LIST - LEFT COLUMN -->                 
-                <div class="col-sm-10">
-                    <div class="blog-posts-block">
-                        <c:forEach var="post" items="${blogList}">
-                            <div class="blog-post row">
-                                <div class="col-sm-12">
-                                    <h3>${post.postTitle}</h3>
-                                    <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
-                                        <c:forEach var="category" items="${post.postCategories}">  
-                                            <a href="#">${category}</a> 
-                                        </c:forEach>&nbsp;&nbsp;&nbsp;
-                                        <c:forEach var="tag" items="${post.postTags}"> 
-                                            <a href="#">${tag}</a>
-                                        </c:forEach>
-                                        ${post.postContent}
-                                    </p>
-                                    <p>
-                                        <a class="btn btn-primary" href="${pageContext.request.contextPath}/post/${post.postId}">Read More</a>
-                                    </p>
-                                </div>
+
+            <!--POST LIST - LEFT COLUMN -->                 
+            <div class="col-sm-10">
+
+
+
+                <div class="blog-posts-block">
+                    <c:if test="${tagView == 1}">
+                        <h2>#${term}:</h2>
+                    </c:if>
+                        <br/>
+                    <c:forEach var="post" items="${blogList}">
+                        <div class="blog-post row">
+                            <div class="col-sm-12">
+                                <h3>${post.postTitle}</h3>
+                                <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
+                                    <c:forEach var="category" items="${post.postCategories}">  
+                                        <a href="${pageContext.request.contextPath}/category/${category}">${category}</a> 
+                                    </c:forEach>&nbsp;&nbsp;&nbsp;
+                                    <c:forEach var="tag" items="${post.postTags}"> 
+                                        <a href="${pageContext.request.contextPath}/tag/${tag}">${tag}</a>
+                                    </c:forEach>
+                                <pre>
+                                    ${post.postContent}
+                                </pre>
+                                </p>
+                                <p>
+                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/post/${post.postId}">Read More</a>
+                                </p>
                             </div>
-                        </c:forEach>
-                    </div>
-                    <div class="text-center">
-                        <nav>
-                            <ul class="pagination">
-                                <c:choose>
-                                    <c:when test="${currentPage > 0}">
-                                        <c:set var="previousPage" value="${currentPage - 1}" />
-                                        <li>
-                                            <a href="${pageContext.request.contextPath}/page/${previousPage}">
-                                                <span>&laquo;</span>
-                                            </a>
-                                        </li>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="disabled">
+                        </div>
+                    </c:forEach>
+                </div>
+                <div class="text-center">
+                    <nav>
+                        <ul class="pagination">
+                            <c:choose>
+                                <c:when test="${currentPage > 0}">
+                                    <c:set var="previousPage" value="${currentPage - 1}" />
+                                    <li>
+                                        <a href="${pageContext.request.contextPath}/page/${previousPage}">
                                             <span>&laquo;</span>
-                                        </li>
-                                    </c:otherwise>
-                                </c:choose>
+                                        </a>
+                                    </li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li class="disabled">
+                                        <span>&laquo;</span>
+                                    </li>
+                                </c:otherwise>
+                            </c:choose>
 
-                                <c:forEach begin="0" end="${numPages}" varStatus="page">
-                                    <c:set var="pageNumber" value="${page.index + 1}" />
+                            <c:forEach begin="0" end="${numPages}" varStatus="page">
+                                <c:set var="pageNumber" value="${page.index + 1}" />
 
-                                    <c:choose>
-                                        <c:when test="${currentPage == page.index}">
-                                            <li class="active"><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                                <c:choose>
+                                    <c:when test="${currentPage == page.index}">
+                                        <li class="active"><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
                                         </c:when>
                                         <c:otherwise>
-                                            <li><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
 
-                                <c:choose>
-                                    <c:when test="${currentPage < numPages}">
-                                        <c:set var="nextPage" value="${currentPage + 1}" />
-                                        <li>
-                                            <a href="${pageContext.request.contextPath}/page/${nextPage}">
-                                                <span>&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="disabled">
+                            <c:choose>
+                                <c:when test="${currentPage < numPages}">
+                                    <c:set var="nextPage" value="${currentPage + 1}" />
+                                    <li>
+                                        <a href="${pageContext.request.contextPath}/page/${nextPage}">
                                             <span>&raquo;</span>
-                                        </li>
-                                    </c:otherwise>
-                                </c:choose>
+                                        </a>
+                                    </li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li class="disabled">
+                                        <span>&raquo;</span>
+                                    </li>
+                                </c:otherwise>
+                            </c:choose>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!--RIGHT COLUMN-->
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4><strong>Recent Posts</strong></h4>
+                        <hr/>
+                        <div id="recent-posts-body">
+                            <ul>
+                                <c:forEach var="recentpost" items="${recentPostList}">
+                                    <li><a href="${pageContext.request.contextPath}/post/${recentpost.postId}">${recentpost.postTitle}</a></li>
+                                    </c:forEach>
                             </ul>
-                        </nav>
+                        </div>
                     </div>
                 </div>
-                <!--RIGHT COLUMN-->
-                <div class="col-sm-2">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h4><strong>Recent Posts</strong></h4>
-                            <hr/>
-                            <div id="recent-posts-body">
-                                <ul>
-                                    <c:forEach var="recentpost" items="${recentPostList}">
-                                        <li><a href="${pageContext.request.contextPath}/post/${recentpost.postId}">${recentpost.postTitle}</a></li>
-                                        </c:forEach>
-                                </ul>
-                            </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr/>
+                        <h4><strong>Tags</strong></h4>
+                        <hr/>
+                        <div id="tags-body">
+                            <c:forEach var="tag" items="${tags}">
+                                <c:set var="fontSize" value="${((tag.term_count/5) * (2 - 0.65)) + 0.65}" />
+                                <fmt:formatNumber var="fontSize" maxFractionDigits="2" value="${fontSize}" />
+                                <a href="${pageContext.request.contextPath}/tag/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
+                                &nbsp;
+                            </c:forEach>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <hr/>
-                            <h4><strong>Tags</strong></h4>
-                            <hr/>
-                            <div id="tags-body">
-                                <c:forEach var="tag" items="${tags}">
-                                    <c:set var="fontSize" value="${((tag.term_count/5) * (2 - 0.65)) + 0.65}" />
-                                    <fmt:formatNumber var="fontSize" maxFractionDigits="2" value="${fontSize}" />
-                                    <a href="${pageContext.request.contextPath}/post/${tag.term_name}" style="font-size: ${fontSize}em">${tag.term_name}</a>
-                                    &nbsp;
-                                </c:forEach>
-                            </div>
-                        </div>
-                    </div>
-                </div>                
-            </div>
+                </div>
+            </div>                
         </div>
+
 
 
         <!-- Placed at the end of the document so the pages load faster -->

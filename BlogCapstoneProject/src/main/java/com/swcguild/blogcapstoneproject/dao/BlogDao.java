@@ -38,11 +38,11 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_SELECT_POST = "SELECT * FROM posts WHERE post_id = ?";
 
     private final String SQL_ADMIN_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog'";
-    
+
     private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish'";
-    
+
     private final String SQL_COUNT_PUBLISHED_POSTS = "SELECT COUNT(post_id) FROM posts WHERE post_type = 'blog' AND post_status = 'publish'";
-    
+
     private final String SQL_LIST_BLOG_POSTS_FOR_INDEX = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish' LIMIT 5 OFFSET ?";
 
     private final String SQL_SELECT_RECENT_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 5";
@@ -61,7 +61,7 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_LIST_COMMENTS_BY_POST_ID = "SELECT * FROM comments WHERE post_id = ?";
 
     private final String SQL_ADMIN_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type = 'page'";
-    
+
     private final String SQL_LIST_STATIC_PAGES = "SELECT * FROM posts WHERE post_type = 'page' AND post_status = 'publish'";
 
     private final String SQL_LIST_ALL_COMMENTS = "SELECT * FROM comments";
@@ -71,7 +71,7 @@ public class BlogDao implements BlogPostDaoInterface {
             + "WHERE t.term_type = 'tag' GROUP BY tp.term_id, t.term_name";
 
     private final String SQL_SELECT_ALL_TERMS_BY_TYPE = "SELECT term_name FROM terms WHERE term_type = ?";
-    
+
     private final String SQL_SELECT_POSTS_BY_TERM = "select * from posts as p join terms_posts as tp on p.post_id = tp.post_id join terms as t on tp.term_id = t.term_id where term_name = ? "
             + "AND post_type = 'blog' AND post_status = 'publish'";
 
@@ -131,6 +131,11 @@ public class BlogDao implements BlogPostDaoInterface {
             return null;
         }
     }
+    
+    @Override
+    public List<String> getTermsByType(String type) {
+        return jdbcTemplate.queryForList(SQL_SELECT_ALL_TERMS_BY_TYPE, String.class, type);
+    }
 
     @Override
     public List<Post> listPosts(String loggedInUser) {
@@ -140,13 +145,28 @@ public class BlogDao implements BlogPostDaoInterface {
             return jdbcTemplate.query(SQL_LIST_BLOG_POSTS, new PostMapper());
         }
     }
-    
+
     @Override
     public List<Post> listPostsByTerm(String termName) {
-        return jdbcTemplate.query(SQL_SELECT_POSTS_BY_TERM, new PostMapper(), termName);
-    }
+        List<Post> posts = jdbcTemplate.query(SQL_SELECT_POSTS_BY_TERM, new PostMapper(), termName);
+        for (Post post : posts) {
+            String[] contentArray = post.getPostContent().split(" ");
+            String exerpt = "";
+            int limit = contentArray.length > 50 ? 50 : contentArray.length;
 
-//     limit to 5 posts per page?
+            for (int i = 0; i < limit; i++) {
+                exerpt += contentArray[i] + " ";
+            }
+            if (contentArray.length > 50) {
+                exerpt += "&hellip;";
+            }
+            post.setPostContent(exerpt);
+            post.setPostCategories(StringUtils.collectionToCommaDelimitedString(getTermsForPost(post.getPostId(), "category")));
+            post.setPostTags(StringUtils.collectionToCommaDelimitedString(getTermsForPost(post.getPostId(), "tag")));
+        }
+        return posts;
+    }
+    
     @Override
     public List<Post> listPostsForIndex(int offset) {
         List<Post> posts = jdbcTemplate.query(SQL_LIST_BLOG_POSTS_FOR_INDEX, new PostMapper(), offset);
@@ -170,7 +190,7 @@ public class BlogDao implements BlogPostDaoInterface {
         }
         return posts;
     }
-    
+
     @Override
     public int countPublishedPosts() {
         return jdbcTemplate.queryForObject(SQL_COUNT_PUBLISHED_POSTS, Integer.class);
