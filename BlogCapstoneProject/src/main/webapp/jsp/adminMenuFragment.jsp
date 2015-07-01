@@ -16,8 +16,14 @@
             <li id="add-static-page-button"><a href="${pageContext.request.contextPath}/addNewPage">Add Page</a></li>
         </ul>
     </li>
-    <li id="admin-nav-item" class="dropdown"><a href="${pageContext.request.contextPath}/adminCommentView">Comments</a></li>
-
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+        <li id="admin-nav-item" class="dropdown">
+            <a href="${pageContext.request.contextPath}/adminCommentView">Comments</a>
+        </li>
+        <li id="admin-nav-item" class="dropdown">
+            <a href="${pageContext.request.contextPath}/adminOptions">Options</a>
+        </li>
+    </sec:authorize>
     <!-- #1 - Logout link -->
     <li>
         <a href="${pageContext.request.contextPath}/j_spring_security_logout">Log Out</a>

@@ -8,6 +8,7 @@ package com.swcguild.blogcapstoneproject.controller;
 import com.octo.captcha.service.image.ImageCaptchaService;
 import com.swcguild.blogcapstoneproject.dao.BlogPostDaoInterface;
 import com.swcguild.blogcapstoneproject.dto.Comment;
+import com.swcguild.blogcapstoneproject.dto.Option;
 import com.swcguild.blogcapstoneproject.dto.Post;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -66,6 +67,9 @@ public class BlogController {
         model.addAttribute("categories", dao.getTermsByType("category"));
         model.addAttribute("blogList", dao.listPostsForIndex(0));
         model.addAttribute("currentPage", 0);
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
 
         int numPages = (int) Math.ceil(countPublishedPosts / 5);
         model.addAttribute("numPages", numPages);
@@ -80,7 +84,7 @@ public class BlogController {
 
     @RequestMapping(value = {"adminPortal", "adminBlogView"}, method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public String displayAdminPostView() {
+    public String displayAdminPostView(Model model) {
         auth = SecurityContextHolder.getContext().getAuthentication();
 
         Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) auth.getAuthorities();
@@ -98,13 +102,20 @@ public class BlogController {
         }
 
         loggedInUser = auth.getName();
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
 
         return "adminBlogView";
     }
 
     @RequestMapping(value = "adminPageView", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public String displayAdminPageView() {
+    public String displayAdminPageView(Model model) {
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "adminPageView";
     }
 
@@ -114,6 +125,10 @@ public class BlogController {
     public String displayAddNewPost(Model model) {
         model.addAttribute("postType", "blog");
         model.addAttribute("categoryList", dao.getAllTerms("category"));
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "addPost";
     }
 
@@ -122,16 +137,24 @@ public class BlogController {
     public String displayAddNewPage(Model model) {
         model.addAttribute("postType", "page");
         model.addAttribute("categoryList", dao.getAllTerms("category"));
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "addPost";
     }
 
     @RequestMapping(value = "category/{category}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String getPostsForCategory(@PathVariable("category") String category, Model model) {
-        model.addAttribute("blogList", dao.listPostsByTerm(category));
+        model.addAttribute("blogList", dao.listPostsByTerm(category, "category"));
         model.addAttribute("recentPostList", dao.listRecentPosts());
         model.addAttribute("tags", dao.getAllTagsAndCount());
         model.addAttribute("categories", dao.getTermsByType("category"));
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "index";
     }
 
@@ -142,6 +165,9 @@ public class BlogController {
         model.addAttribute("post", post);
         model.addAttribute("categoryList", Arrays.asList(post.getPostCategories().split(",")));
         model.addAttribute("tagList", Arrays.asList(post.getPostTags().split(",")));
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
 
         return "editPost";
     }
@@ -151,6 +177,7 @@ public class BlogController {
         model.addAttribute("recentPostList", dao.listRecentPosts());
         model.addAttribute("tags", dao.getAllTagsAndCount());
         model.addAttribute("currentPage", page);
+        model.addAttribute("categories", dao.getTermsByType("category"));
 
         int numPages = (int) Math.ceil(countPublishedPosts / 5);
         model.addAttribute("numPages", numPages);
@@ -158,6 +185,10 @@ public class BlogController {
         int offset = page * 5;
 
         model.addAttribute("blogList", dao.listPostsForIndex(offset));
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "index";
     }
 
@@ -203,13 +234,18 @@ public class BlogController {
         model.addAttribute("recentPostList", dao.listRecentPosts());
         model.addAttribute("tags", dao.getAllTagsAndCount());
         model.addAttribute("categories", dao.getTermsByType("category"));
-        model.addAttribute("blogList", dao.listPostsByTerm(term));
+        model.addAttribute("blogList", dao.listPostsByTerm(term, "tag"));
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "index";
     }
 
     @RequestMapping(value = "post/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deletePost(@PathVariable int id) {
+        dao.deleteTermFromPost(id);
         dao.deletePost(id);
     }
 
@@ -236,8 +272,13 @@ public class BlogController {
     @ResponseStatus(HttpStatus.OK)
     public String displayPostPage(@PathVariable int id, Model model) {
         model.addAttribute("recentPostList", dao.listRecentPosts());
+        model.addAttribute("categories", dao.getTermsByType("category"));
         model.addAttribute("tags", dao.getAllTagsAndCount());
         model.addAttribute("post", dao.getPost(id));
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "staticPage";
     }
 
@@ -269,7 +310,11 @@ public class BlogController {
     ///COMMENT ENDPOINTS///
     @RequestMapping(value = "adminCommentView", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public String displayAdminCommentPage() {
+    public String displayAdminCommentPage(Model model) {
+        
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
         return "adminCommentView";
     }
 
@@ -318,6 +363,26 @@ public class BlogController {
         Comment comment = dao.getComment(id);
         comment.setCommentStatus("unapproved");
         dao.updateComment(comment);
+    }
+
+    @RequestMapping(value = "adminOptions", method = RequestMethod.GET)
+    public String adminOptions(Model model) {
+        Option blogTitle = dao.getOption("blogTitle");
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        
+        return "adminOptions";
+    }
+    
+    @RequestMapping(value = "adminOptions", method = RequestMethod.POST)
+    public String setAdminOptions(Model model, @ModelAttribute("option") Option option) {
+        dao.setOption(option);
+        Option blogTitle = dao.getOption("blogTitle");
+        
+        model.addAttribute("blogTitle", blogTitle.getOptionValue());
+        model.addAttribute("message", "Option updated");
+        
+        
+        return "adminOptions";
     }
 
     private static ImageCaptchaService instance;

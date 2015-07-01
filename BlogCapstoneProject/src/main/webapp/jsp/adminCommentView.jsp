@@ -45,7 +45,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1><a href="${pageContext.request.contextPath}/index">Blog</a> <small>admin portal</small></h1>
+                    <h1><a href="${pageContext.request.contextPath}/index">
+                            ${blogTitle}
+                        </a> <small>admin portal</small>
+                    </h1>
                 </div>
             </div>
             <hr/>
@@ -68,7 +71,7 @@
                 <div class="col-sm-1"></div>
             </div>
         </div> 
-        
+
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/adminCommentView.js"></script>

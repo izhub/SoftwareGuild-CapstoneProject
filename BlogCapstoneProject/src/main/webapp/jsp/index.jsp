@@ -42,106 +42,112 @@
 
         <!--HEADER-->
         <div id="header" class="container">
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/index">Home</a></li>
-                        <c:forEach var="category" items="${categories}">
-                        <li role="presentation">
-                            <a href="${pageContext.request.contextPath}/category/${category}">${category}</a>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </div>   
-            <h1>Blog</h1>  
+            <%@include file="pageMenuFragment.jsp" %>
+            <h1>${blogTitle}</h1>
             <hr/>
         </div>
 
-
         <div class="container">
 
-            <!--POST LIST - LEFT COLUMN -->                 
-            <div class="col-sm-10">
+            <!--POST LIST - LEFT COLUMN -->
+            <c:choose>
+                <c:when test="${fn:length(blogList) <= 0}">
+                    <div class="col-sm-10">
+                        No posts found
+                    </div>
+                </c:when>
 
-
-
-                <div class="blog-posts-block">
-                    <c:if test="${tagView == 1}">
-                        <h2>#${term}:</h2>
-                    </c:if>
-                        <br/>
-                    <c:forEach var="post" items="${blogList}">
-                        <div class="blog-post row">
-                            <div class="col-sm-12">
-                                <h3>${post.postTitle}</h3>
-                                <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
-                                    <c:forEach var="category" items="${post.postCategories}">  
-                                        <a href="${pageContext.request.contextPath}/category/${category}">${category}</a> 
-                                    </c:forEach>&nbsp;&nbsp;&nbsp;
-                                    <c:forEach var="tag" items="${post.postTags}"> 
-                                        <a href="${pageContext.request.contextPath}/tag/${tag}">${tag}</a>
-                                    </c:forEach>
-                                <pre>
-                                    ${post.postContent}
-                                </pre>
-                                </p>
-                                <p>
-                                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/post/${post.postId}">Read More</a>
-                                </p>
-                            </div>
+                <c:otherwise>
+                    <div class="col-sm-10">
+                        <div class="blog-posts-block">
+                            <c:if test="${tagView == 1}">
+                                <h2>#${term}:</h2>
+                            </c:if>
+                            <br/>
+                            <c:forEach var="post" items="${blogList}">
+                                <div class="blog-post row">
+                                    <div class="col-sm-12">
+                                        <h3>${post.postTitle}</h3>
+                                        <p id="post-info">by ${post.postUserName} on
+                                            <fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
+                                                <br />
+                                            <c:if test="${fn:length(post.postCategories) > 0}">
+                                                Categories: 
+                                                <c:forEach var="category" items="${post.postCategories}">  
+                                                    <a href="${pageContext.request.contextPath}/category/${category}">${category}</a> 
+                                                </c:forEach>
+                                            </c:if>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <c:if test="${fn:length(post.postTags) > 0}">
+                                                Tags:
+                                                <c:forEach var="tag" items="${post.postTags}"> 
+                                                    <a href="${pageContext.request.contextPath}/tag/${tag}">${tag}</a>
+                                                </c:forEach>
+                                            </c:if>
+                                            <br /><br />
+                                            ${post.postContent}
+                                        </p>
+                                        <p>
+                                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/post/${post.postId}">Read More</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
-                    </c:forEach>
-                </div>
-                <div class="text-center">
-                    <nav>
-                        <ul class="pagination">
-                            <c:choose>
-                                <c:when test="${currentPage > 0}">
-                                    <c:set var="previousPage" value="${currentPage - 1}" />
-                                    <li>
-                                        <a href="${pageContext.request.contextPath}/page/${previousPage}">
-                                            <span>&laquo;</span>
-                                        </a>
-                                    </li>
-                                </c:when>
-                                <c:otherwise>
-                                    <li class="disabled">
-                                        <span>&laquo;</span>
-                                    </li>
-                                </c:otherwise>
-                            </c:choose>
-
-                            <c:forEach begin="0" end="${numPages}" varStatus="page">
-                                <c:set var="pageNumber" value="${page.index + 1}" />
-
-                                <c:choose>
-                                    <c:when test="${currentPage == page.index}">
-                                        <li class="active"><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                        <div class="text-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <c:choose>
+                                        <c:when test="${currentPage > 0}">
+                                            <c:set var="previousPage" value="${currentPage - 1}" />
+                                            <li>
+                                                <a href="${pageContext.request.contextPath}/page/${previousPage}">
+                                                    <span>&laquo;</span>
+                                                </a>
+                                            </li>
                                         </c:when>
                                         <c:otherwise>
-                                        <li><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                                            <li class="disabled">
+                                                <span>&laquo;</span>
+                                            </li>
                                         </c:otherwise>
                                     </c:choose>
-                                </c:forEach>
 
-                            <c:choose>
-                                <c:when test="${currentPage < numPages}">
-                                    <c:set var="nextPage" value="${currentPage + 1}" />
-                                    <li>
-                                        <a href="${pageContext.request.contextPath}/page/${nextPage}">
-                                            <span>&raquo;</span>
-                                        </a>
-                                    </li>
-                                </c:when>
-                                <c:otherwise>
-                                    <li class="disabled">
-                                        <span>&raquo;</span>
-                                    </li>
-                                </c:otherwise>
-                            </c:choose>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+                                    <c:forEach begin="0" end="${numPages}" varStatus="page">
+                                        <c:set var="pageNumber" value="${page.index + 1}" />
+
+                                        <c:choose>
+                                            <c:when test="${currentPage == page.index}">
+                                                <li class="active"><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                                <li><a href="${pageContext.request.contextPath}/page/${page.index}">${pageNumber}</a></li>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+
+                                    <c:choose>
+                                        <c:when test="${currentPage < numPages}">
+                                            <c:set var="nextPage" value="${currentPage + 1}" />
+                                            <li>
+                                                <a href="${pageContext.request.contextPath}/page/${nextPage}">
+                                                    <span>&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li class="disabled">
+                                                <span>&raquo;</span>
+                                            </li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                </c:otherwise>
+            </c:choose>
             <!--RIGHT COLUMN-->
             <div class="col-sm-2">
                 <div class="row">

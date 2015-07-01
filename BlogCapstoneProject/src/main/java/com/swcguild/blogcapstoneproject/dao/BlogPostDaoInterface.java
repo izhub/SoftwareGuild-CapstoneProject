@@ -6,6 +6,7 @@
 package com.swcguild.blogcapstoneproject.dao;
 
 import com.swcguild.blogcapstoneproject.dto.Comment;
+import com.swcguild.blogcapstoneproject.dto.Option;
 import com.swcguild.blogcapstoneproject.dto.Post;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public interface BlogPostDaoInterface {
     public List<Post> listPostsForIndex(int offset);
     public int countPublishedPosts();
     public List<Post> listRecentPosts();
-    public List<Post> listPostsByTerm(String termName); 
+    public List<Post> listPostsByTerm(String termName, String termType); 
     
     
     public void deleteCommentsForPost(int postId);
@@ -48,4 +49,7 @@ public interface BlogPostDaoInterface {
     public List<String> getTermsByType(String type);
     
     public int getUserId(String userName);
+    
+    public Option getOption(String optionName);
+    public void setOption(Option option);
 }

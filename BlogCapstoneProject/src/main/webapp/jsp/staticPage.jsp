@@ -2,6 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -61,17 +62,8 @@
     <body>
         <!--HEADER-->
         <div id="header" class="container">
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="${pageContext.request.contextPath}/index">Home</a></li>
-                        <c:forEach var="page" items="${staticPages}">
-                        <li role="presentation">
-                            <a href="${pageContext.request.contextPath}/staticPages/{${page.pageId}}">${page.pageName}</a>
-                        </li>
-                    </c:forEach>
-                </ul>    
-            </div>   
-            <h1>Blog</h1>  
+            <%@include file="pageMenuFragment.jsp" %>  
+            <h1>${blogTitle}</h1>  
             <hr/>
         </div>
         <div class="container">
@@ -79,32 +71,42 @@
             <!--LEFT COLUMN - BLOG POST CONTENT--->
             <div id="left-column" class="col-sm-10">
                 <div id="post" class="row">
-                    <h2>${post.postTitle}</h2>
-                    <div class="post-content">
-                        <input type="hidden" id="postId" value="${post.postId}"/>
-                        <p id="post-info">Author&nbsp;&nbsp;&nbsp;<fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
-                            <c:forEach var="category" items="${post.postCategories}">  
-                                <a href="${pageContext.request.contextPath}/category/${category}">${category}</a> 
-                            </c:forEach>&nbsp;&nbsp;&nbsp;
-                            <c:forEach var="tag" items="${post.postTags}"> 
-                                <a href="${pageContext.request.contextPath}/tag/${tag}">${tag}</a>
-                            </c:forEach>
-                        </p>
-                        <div class="post-body">
-                            ${post.postContent}     
-                        </div>
-                        <br/>
-                        <!--                    <div class="post-footer">
-                                                <div class="form-horizontal">
-                                                <h5><strong>Comments</strong</h5>
-                                                
-                                                <h5><strong>Tags:</strong></h5>
-                        <c:forEach var="tag" items="${post.postTags}"> 
-                            <a href="#">${tag}</a>
-                        </c:forEach>
-                    </div>-->
-                    </div>
+                    <c:choose>
+                        <c:when test="${empty post}">
+                            No posts found
+                        </c:when>
+
+                        <c:otherwise>
+                            <h2>${post.postTitle}</h2>
+                            <div class="post-content">
+                                <input type="hidden" id="postId" value="${post.postId}"/>
+                                <p id="post-info">by ${post.postUserName} on
+                                    <fmt:formatDate pattern="MM/dd/yyyy" value="${post.postDate}"></fmt:formatDate>&nbsp;&nbsp;&nbsp;
+                                        <br />
+                                    <c:if test="${fn:length(post.postCategories) > 0}">
+                                        Categories: 
+                                        <c:forEach var="category" items="${post.postCategories}">  
+                                            <a href="${pageContext.request.contextPath}/category/${category}">${category}</a> 
+                                        </c:forEach>
+                                    </c:if>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <c:if test="${fn:length(post.postTags) > 0}">
+                                        Tags:
+                                        <c:forEach var="tag" items="${post.postTags}"> 
+                                            <a href="${pageContext.request.contextPath}/tag/${tag}">${tag}</a>
+                                        </c:forEach>
+                                    </c:if>
+                                </p>
+                                <div class="post-body">
+                                    ${post.postContent}     
+                                </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+
                 </div>
+                Comments:        
+                <div id="comments"></div>
                 <div class="row" id="add-comment-row">
                     <div class="col-sm-6"> 
                         <c:out value="${message}" />

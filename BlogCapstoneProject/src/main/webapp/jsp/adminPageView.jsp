@@ -45,7 +45,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1><a href="${pageContext.request.contextPath}/index">Blog</a> <small>admin portal</small></h1>
+                    <h1><a href="${pageContext.request.contextPath}/index">
+                            ${blogTitle}
+                        </a> <small>admin portal</small>
+                    </h1>
                 </div>
             </div>
             <hr/>

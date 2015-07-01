@@ -64,7 +64,10 @@
     </head>
     <body>
         <div class="container-fluid">
-            <h1>Admin Portal</h1>
+            <h1><a href="${pageContext.request.contextPath}/index">
+                    ${blogTitle}
+                </a> <small>admin portal</small>
+            </h1>
             <hr/>
             <div class ="col-sm-2">
                 <%@include file="adminMenuFragment.jsp" %>

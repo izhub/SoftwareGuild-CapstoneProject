@@ -9,7 +9,7 @@
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png"/>
         <style>
             #login-form-div {
-               margin-top: 100px;
+                margin-top: 100px;
             }
             h2 {
                 margin-top:100px;
@@ -27,41 +27,43 @@
             <h2>Admin Login Page</h2>
             <!-- #1 - If login_error == 1 then there was a failed login attempt --> 
             <!--      so display an error message                                -->
-            <c:if test="${param.login_error == 1}">
-                <h3>Wrong id or password!</h3>
-            </c:if>
-
+            <hr />
 
             <!-- #2 - Post to Spring security to check our authentication -->
-            <form method="post" class="signin" action="j_spring_security_check">
-                <fieldset>
-                    <table cellspacing="0">
-                        <tr>
-                            <th>
-                                <label for="username">Username
-                                </label>
-                            </th>
-                          
-                            <td><input id="username_or_email"
-                                       name="j_username" 
-                                       type="text" /> 
-                            </td>
-                        </tr>
-                        <tr>
-                            <th><label for="password">Password</label></th>
-                            <!-- #2b - must be j_password for Spring -->
-                            <td><input id="password"
-                                       name="j_password" 
-                                       type="password" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <td><input name="commit" type="submit" value="Sign In" /></td>
-                        </tr>
-                    </table>
-                </fieldset>
-            </form>
+            <div class="container">
+                <c:if test="${param.login_error == 1}">
+                    <div class="row">
+                        <div class="col-sm-12 text-warning text-center">
+                            Wrong id or password!
+                        </div>
+                    </div>
+                </c:if>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" class="form-horizontal" action="j_spring_security_check">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-offset-4 col-sm-1 control-label">Username: </label>
+                                <div class="col-sm-1">
+                                    <input id="username" name="j_username" type="text" />
+                                </div>                          
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-offset-4 col-sm-1 control-label">Password: </label>
+                                <div class="col-sm-1">
+                                    <input id="password" name="j_password" type="password" />
+                                </div>                          
+                            </div>
+                            <div class="form-group">
+                                <div  class="col-sm-offset-5 col-sm-2">
+                                    <button type="submit" class="btn btn-default">Sign In</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </body>
 </html>

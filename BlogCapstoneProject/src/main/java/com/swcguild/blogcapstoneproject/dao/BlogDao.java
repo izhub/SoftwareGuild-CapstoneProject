@@ -6,7 +6,9 @@
 package com.swcguild.blogcapstoneproject.dao;
 
 import com.swcguild.blogcapstoneproject.dto.Comment;
+import com.swcguild.blogcapstoneproject.dto.Option;
 import com.swcguild.blogcapstoneproject.dto.Post;
+import java.net.URLDecoder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +16,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,16 +47,17 @@ public class BlogDao implements BlogPostDaoInterface {
             + "JOIN users u ON p.post_user_id = u.user_id WHERE post_type = 'blog' "
             + "AND u.user_id IN (SELECT user_id FROM users WHERE user_role = 'ROLE_MARKETING')";
 
-    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish'";
+    private final String SQL_LIST_BLOG_POSTS = "SELECT * FROM posts WHERE post_type = 'blog' AND post_status = 'publish' ORDER BY post_date DESC";
 
     private final String SQL_COUNT_PUBLISHED_POSTS = "SELECT COUNT(post_id) FROM posts WHERE post_type = 'blog' AND post_status = 'publish'";
 
     private final String SQL_LIST_BLOG_POSTS_FOR_INDEX = "SELECT p.*, u.user_name FROM posts p "
-            + "JOIN users u ON p.post_user_id = u.user_id WHERE post_type = 'blog' AND post_status = 'publish' LIMIT 5 OFFSET ?";
+            + "JOIN users u ON p.post_user_id = u.user_id WHERE post_type = 'blog' AND post_status = 'publish' "
+            + "ORDER BY post_date DESC LIMIT 5 OFFSET ?";
 
     private final String SQL_SELECT_RECENT_POSTS = "SELECT p.*, u.user_name FROM posts p "
             + "JOIN users u ON p.post_user_id = u.user_id WHERE post_type = 'blog' AND post_status = 'publish' "
-            + "ORDER BY post_id DESC LIMIT 5";
+            + "ORDER BY post_date DESC LIMIT 5";
 
     private final String SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, user_id, comment_author_name, comment_author_email, comment_content, comment_date, comment_author_website) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -65,7 +70,7 @@ public class BlogDao implements BlogPostDaoInterface {
 
     private final String SQL_SELECT_COMMENT = "SELECT * FROM comments WHERE comment_id = ?";
 
-    private final String SQL_LIST_COMMENTS_BY_POST_ID = "SELECT * FROM comments WHERE post_id = ?";
+    private final String SQL_LIST_COMMENTS_BY_POST_ID = "SELECT * FROM comments WHERE post_id = ? ORDER by comment_date DESC";
 
     private final String SQL_ADMIN_LIST_STATIC_PAGES = "SELECT p.*, u.user_name FROM posts p "
             + "JOIN users u ON p.post_user_id = u.user_id WHERE post_type = 'page'";
@@ -86,7 +91,7 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_SELECT_ALL_TERMS_BY_TYPE = "SELECT term_name FROM terms WHERE term_type = ?";
 
     private final String SQL_SELECT_POSTS_BY_TERM = "select p.*, u.* from posts as p join terms_posts as tp on p.post_id = tp.post_id join terms as t on tp.term_id = t.term_id join users u on p.post_user_id = u.user_id where term_name = ? "
-            + "AND post_status = 'publish'";
+            + " AND term_type = ? AND post_status = 'publish' ORDER BY post_date DESC";
 
     private final String SQL_INSERT_TERM = "INSERT INTO terms (term_name, term_type) VALUES (?, ?)";
 
@@ -102,6 +107,12 @@ public class BlogDao implements BlogPostDaoInterface {
     private final String SQL_DELETE_UNUSED_TAGS = "DELETE FROM terms WHERE term_id NOT IN (SELECT DISTINCT term_id FROM terms_posts)";
 
     private final String SQL_SELECT_USER_ID_BY_USER_NAME = "SELECT user_id FROM users WHERE user_name = ?";
+    
+    private final String SQL_SELECT_OPTION_BY_OPTION_NAME = "SELECT * FROM options WHERE option_name = ?";
+    
+    private final String SQL_INSERT_OPTION = "INSERT INTO options (option_name, option_value) VALUES (?, ?)";
+    
+    private final String SQL_DELETE_OPTION = "DELETE FROM options WHERE option_name = ?";
 
     //2a: Declare JdbcTemplate Reference - the instance will be handed to us by Spring
     private JdbcTemplate jdbcTemplate;
@@ -167,10 +178,11 @@ public class BlogDao implements BlogPostDaoInterface {
     }
 
     @Override
-    public List<Post> listPostsByTerm(String termName) {
-        List<Post> posts = jdbcTemplate.query(SQL_SELECT_POSTS_BY_TERM, new PostMapper(), termName);
+    public List<Post> listPostsByTerm(String termName, String termType) {
+        List<Post> posts = jdbcTemplate.query(SQL_SELECT_POSTS_BY_TERM, new PostMapper(), termName, termType);
         for (Post post : posts) {
-            String[] contentArray = post.getPostContent().split(" ");
+            Document content = Jsoup.parse(post.getPostContent().trim());
+            String[] contentArray = content.text().split(" ");
             String exerpt = "";
             int limit = contentArray.length > 50 ? 50 : contentArray.length;
 
@@ -192,7 +204,8 @@ public class BlogDao implements BlogPostDaoInterface {
         List<Post> posts = jdbcTemplate.query(SQL_LIST_BLOG_POSTS_FOR_INDEX, new PostMapper(), offset);
 
         for (Post post : posts) {
-            String[] contentArray = post.getPostContent().split(" ");
+            Document content = Jsoup.parse(post.getPostContent().trim());
+            String[] contentArray = content.text().split(" ");
             String exerpt = "";
             int limit = contentArray.length > 50 ? 50 : contentArray.length;
 
@@ -202,11 +215,9 @@ public class BlogDao implements BlogPostDaoInterface {
             if (contentArray.length > 50) {
                 exerpt += "&hellip;";
             }
-
+            post.setPostContent(exerpt);
             post.setPostCategories(StringUtils.collectionToCommaDelimitedString(getTermsForPost(post.getPostId(), "category")));
             post.setPostTags(StringUtils.collectionToCommaDelimitedString(getTermsForPost(post.getPostId(), "tag")));
-
-            post.setPostContent(exerpt);
         }
         return posts;
     }
@@ -427,6 +438,40 @@ public class BlogDao implements BlogPostDaoInterface {
         } catch (EmptyResultDataAccessException e) {
             return 0;
         }
+    }
+
+    @Override
+    public Option getOption(String optionName) {
+        try {
+            return jdbcTemplate.queryForObject(SQL_SELECT_OPTION_BY_OPTION_NAME, new OptionMapper(), optionName);
+        } catch (EmptyResultDataAccessException e) {
+            return new Option();
+        }
+    }
+
+    @Override
+    public void setOption(Option option) {
+        try {
+            jdbcTemplate.queryForObject(SQL_SELECT_OPTION_BY_OPTION_NAME, new OptionMapper(), "blogTitle");
+            jdbcTemplate.update(SQL_DELETE_OPTION, "blogTitle");
+        } catch (EmptyResultDataAccessException e) {
+            
+        } finally {
+            jdbcTemplate.update(SQL_INSERT_OPTION, "blogTitle", option.getOptionValue());
+        }
+    }
+    
+    private class OptionMapper implements ParameterizedRowMapper<Option> {
+
+        @Override
+        public Option mapRow(ResultSet rs, int i) throws SQLException {
+            Option option = new Option();
+            option.setOptionName(rs.getString("option_name"));
+            option.setOptionValue(rs.getString("option_value"));
+            
+            return option;
+        }
+        
     }
 
     private class CommentMapper implements ParameterizedRowMapper<Comment> {

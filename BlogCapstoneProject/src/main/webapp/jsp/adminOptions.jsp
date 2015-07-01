@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -46,7 +47,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <h1><a href="${pageContext.request.contextPath}/index">
-                        ${blogTitle}
+                            ${blogTitle}
                         </a> <small>admin portal</small>
                     </h1>
                 </div>
@@ -57,22 +58,26 @@
             </div>
             <div class="col-sm-10" id="admin-view-box">
                 <div class="col-sm-11">
-                    <h3 id="table-header"></h3>
-                    <table class="table table-hover" id="posts-table">
-                        <th width="20%">Title</th>
-                        <th width="20%">Author</th>
-                        <th width="20%">Status</th>
-                        <th width="20%">Date</th>
-                        <th width="10%"></th>
-                        <th width="10%"></th>
-                        <tbody id="posts-table-content"></tbody>
-                    </table>
+                    <h3>Options</h3>
+                    <c:out value="${message}" />
+                    <sf:form modelAttribute="option" class="form-horizontal" method="POST">
+                        <div class="form-group">
+                            <label for="optionValue" class="col-sm-offset-2 col-sm-2 control-label">Blog Title </label>
+                            <div class="col-sm-8">
+                                <input id="optionValue" name="optionValue" type="text" value="${blogTitle}" />
+                            </div>                          
+                        </div>
+                        <div class="form-group">
+                            <div  class="col-sm-offset-5 col-sm-2">
+                                <button type="submit" class="btn btn-default">Update</button>
+                            </div>
+                        </div>
+                    </sf:form>
                 </div>
                 <div class="col-sm-1"></div>
             </div>
         </div> 
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/adminBlogView.js"></script>
     </body>    
 </html>
