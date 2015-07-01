@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 26, 2015 at 01:43 PM
+-- Generation Time: Jun 30, 2015 at 08:40 PM
 -- Server version: 5.5.43-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.9
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`comment_id`),
   KEY `post_id` (`post_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=187 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `post_date` datetime NOT NULL,
   PRIMARY KEY (`post_id`),
   KEY `post_user_id` (`post_user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=228 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `terms` (
   `term_type` varchar(50) NOT NULL,
   PRIMARY KEY (`term_id`),
   KEY `term_name` (`term_name`,`term_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=563 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,25 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`user_id`),
   KEY `user_name` (`user_name`),
   KEY `user_display_name` (`user_display_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `user_name`, `user_display_name`, `user_password`, `user_role`) VALUES
+(3, 'admin', 'Administrator', 'password', 'admin'),
+(4, 'marketing', 'Marketing', 'password', 'marketing'),
+(5, 'admin', 'Administrator', 'password', 'admin'),
+(6, 'marketing', 'Marketing', 'password', 'marketing'),
+(7, 'admin', 'Administrator', 'password', 'admin'),
+(8, 'marketing', 'Marketing', 'password', 'marketing'),
+(9, 'admin', 'Administrator', 'password', 'admin'),
+(10, 'marketing', 'Marketing', 'password', 'marketing'),
+(11, 'admin', 'Administrator', 'password', 'admin'),
+(12, 'marketing', 'Marketing', 'password', 'marketing'),
+(13, 'admin', 'Administrator', 'password', 'admin'),
+(14, 'marketing', 'Marketing', 'password', 'marketing');
 
 --
 -- Constraints for dumped tables
@@ -123,8 +141,8 @@ ALTER TABLE `posts`
 -- Constraints for table `terms_posts`
 --
 ALTER TABLE `terms_posts`
-  ADD CONSTRAINT `terms_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`),
-  ADD CONSTRAINT `terms_posts_ibfk_1` FOREIGN KEY (`term_id`) REFERENCES `terms` (`term_id`);
+  ADD CONSTRAINT `terms_posts_ibfk_1` FOREIGN KEY (`term_id`) REFERENCES `terms` (`term_id`),
+  ADD CONSTRAINT `terms_posts_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

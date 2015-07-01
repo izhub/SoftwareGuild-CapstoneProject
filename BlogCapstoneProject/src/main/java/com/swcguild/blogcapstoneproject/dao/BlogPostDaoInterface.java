@@ -20,8 +20,10 @@ public interface BlogPostDaoInterface {
     public void deletePost(int postId);
     public void updatePost(Post post, int postId);
     public Post getPost(int postId);
-    public List<Post> listPosts(String loggedInUser);
-    public List<Post> listPages(String loggedInUser);
+    public List<Post> listPosts();
+    public List<Post> listPostsAdminPortal(String userRole);
+    public List<Post> listPages();
+    public List<Post> listPagesAdminPortal(String userRole);
     public List<Post> listPostsForIndex(int offset);
     public int countPublishedPosts();
     public List<Post> listRecentPosts();

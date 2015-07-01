@@ -2,6 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -102,10 +103,17 @@
                             <div style="height: 20px;" id="edit-confirmation"></div>
                             <div class="form-group">
                                 <div class="col-sm-12">
+                                <sec:authorize access="hasRole('ROLE_ADMIN')">
                                     <button id="commit" type="button" class="btn btn-default">Publish</button>
-                                    <button id="draft" type="button" class="btn btn-default">Save as Draft</button>
-                                </div>
+                                </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_MARKETING')">
+                                    <button id="approval" type="button" class="btn btn-default">Submit for Approval</button>
+                                </sec:authorize>
+                                    
+                                <button id="draft" type="button" class="btn btn-default">Save as Draft</button>
                             </div>
+                        </div>
                     </sf:form>
                 </div>
 

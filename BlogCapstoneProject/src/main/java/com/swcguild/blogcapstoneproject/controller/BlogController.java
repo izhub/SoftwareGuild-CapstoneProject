@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +49,7 @@ public class BlogController {
     BlogPostDaoInterface dao;
     Authentication auth;
     String loggedInUser;
+    String userRole;
     int countPublishedPosts;
 
     @Inject
@@ -79,6 +82,21 @@ public class BlogController {
     @ResponseStatus(HttpStatus.OK)
     public String displayAdminPostView() {
         auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) auth.getAuthorities();
+
+        for (GrantedAuthority authority : authorities) {
+            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                userRole = "ROLE_ADMIN";
+                break;
+            } else if (authority.getAuthority().equals("ROLE_MARKETING")) {
+                userRole = "ROLE_MARKETING";
+                break;
+            } else {
+                break;
+            }
+        }
+
         loggedInUser = auth.getName();
 
         return "adminBlogView";
@@ -103,10 +121,11 @@ public class BlogController {
     @ResponseStatus(HttpStatus.OK)
     public String displayAddNewPage(Model model) {
         model.addAttribute("postType", "page");
+        model.addAttribute("categoryList", dao.getAllTerms("category"));
         return "addPost";
     }
-    
-    @RequestMapping(value = "category/{category}", method=RequestMethod.GET)
+
+    @RequestMapping(value = "category/{category}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String getPostsForCategory(@PathVariable("category") String category, Model model) {
         model.addAttribute("blogList", dao.listPostsByTerm(category));
@@ -148,18 +167,32 @@ public class BlogController {
         dao.deletePost(id);
     }
 
-    @RequestMapping(value = "pages", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public List<Post> getStaticPages() {
-        return dao.listPages(loggedInUser);
-    }
-
     @RequestMapping(value = "posts", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Post> getBlogPosts() {
-        return dao.listPosts(loggedInUser);
+        return dao.listPosts();
+    }
+
+    @RequestMapping(value = "adminPosts", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Post> getBlogPostsAdminPortal() {
+        return dao.listPostsAdminPortal(userRole);
+    }
+
+    @RequestMapping(value = "pages", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Post> getStaticPages() {
+        return dao.listPages();
+    }
+
+    @RequestMapping(value = "adminPages", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Post> getStaticPagesAdminPortal() {
+        return dao.listPagesAdminPortal(userRole);
     }
 
     @RequestMapping(value = "tag/{term}", method = RequestMethod.GET)
@@ -214,7 +247,7 @@ public class BlogController {
         if (post != null) {
             Date date = new Date();
             // we need to get the user that is currently posting
-            post.setPostUserId(dao.getUserId("admin"));
+            post.setPostUserId(dao.getUserId(loggedInUser));
             post.setPostDate(date);
 
             dao.addPost(post);

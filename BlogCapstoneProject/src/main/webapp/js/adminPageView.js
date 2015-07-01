@@ -7,7 +7,7 @@ function loadAllPages() {
     var items = [];
     $.ajax({
         type: 'GET',
-        url: 'pages'
+        url: 'adminPages'
     }).success(function (data, status) {
         $.each(data, function (index, post) {
             $('#table-header').text('Static Pages');
@@ -16,11 +16,7 @@ function loadAllPages() {
             var date = new Date(post.postDate);
             var formattedDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
             
-            if (post.postUserId === 1) {
-                items.push('<td>admin</td>');
-            } else {
-                items.push('<td>marketing</td>');
-            }            
+            items.push('<td>' + post.postUserName + '</td>');
             items.push('<td>' + post.postStatus + '</td>');
             items.push('<td>' + formattedDate + '</td>');
             items.push('<td><a href="displayEditView/' + post.postId + '">Edit</a></td>');

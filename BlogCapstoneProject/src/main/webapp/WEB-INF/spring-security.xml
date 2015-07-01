@@ -37,13 +37,13 @@
         <!-- #3d - Go back to home page when user logs out -->
         <logout logout-success-url="/index" />
         <!-- #3e - Access to these endpoints require admin role -->
-        <intercept-url pattern="/adminPortal" access="ROLE_ADMIN" />
-        <intercept-url pattern="/addNewPost" access="ROLE_ADMIN" />
-        <intercept-url pattern="/adminBlogView" access="ROLE_ADMIN" />
-        <intercept-url pattern="/adminPageView" access="ROLE_ADMIN" />
-        <intercept-url pattern="/editView" access="ROLE_ADMIN" />
+        <intercept-url pattern="/adminPortal" access="ROLE_ADMIN, ROLE_MARKETING" />
+        <intercept-url pattern="/addNewPost" access="ROLE_ADMIN, ROLE_MARKETING" />
+        <intercept-url pattern="/adminBlogView" access="ROLE_ADMIN, ROLE_MARKETING" />
+        <intercept-url pattern="/adminPageView" access="ROLE_ADMIN, ROLE_MARKETING" />
+        <intercept-url pattern="/editView" access="ROLE_ADMIN, ROLE_MARKETING" />
         <!-- #3f - Access to all other controller endpoints require user role -->
-        <intercept-url pattern="/**" access="ROLE_ADMIN" />
+        <intercept-url pattern="/**" access="ROLE_ADMIN, ROLE_MARKETING" />
     </http>
     <!-- #4 - Authentication Manager config -->
     <authentication-manager>

@@ -16,6 +16,7 @@ public class Post {
 
     private int postId;
     private int postUserId;
+    private String postUserName;
     private String postType;
     private String postTitle;
     private String postContent;
@@ -38,6 +39,14 @@ public class Post {
 
     public void setPostUserId(int postUserId) {
         this.postUserId = postUserId;
+    }
+
+    public String getPostUserName() {
+        return postUserName;
+    }
+
+    public void setPostUserName(String postUserName) {
+        this.postUserName = postUserName;
     }
 
     public String getPostType() {
@@ -99,15 +108,16 @@ public class Post {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + this.postId;
-        hash = 71 * hash + this.postUserId;
-        hash = 71 * hash + Objects.hashCode(this.postType);
-        hash = 71 * hash + Objects.hashCode(this.postTitle);
-        hash = 71 * hash + Objects.hashCode(this.postContent);
-        hash = 71 * hash + Objects.hashCode(this.postStatus);
-        hash = 71 * hash + Objects.hashCode(this.postDate);
-        hash = 71 * hash + Objects.hashCode(this.postTags);
-        hash = 71 * hash + Objects.hashCode(this.postCategories);
+        hash = 53 * hash + this.postId;
+        hash = 53 * hash + this.postUserId;
+        hash = 53 * hash + Objects.hashCode(this.postUserName);
+        hash = 53 * hash + Objects.hashCode(this.postType);
+        hash = 53 * hash + Objects.hashCode(this.postTitle);
+        hash = 53 * hash + Objects.hashCode(this.postContent);
+        hash = 53 * hash + Objects.hashCode(this.postStatus);
+        hash = 53 * hash + Objects.hashCode(this.postDate);
+        hash = 53 * hash + Objects.hashCode(this.postTags);
+        hash = 53 * hash + Objects.hashCode(this.postCategories);
         return hash;
     }
 
@@ -124,6 +134,9 @@ public class Post {
             return false;
         }
         if (this.postUserId != other.postUserId) {
+            return false;
+        }
+        if (!Objects.equals(this.postUserName, other.postUserName)) {
             return false;
         }
         if (!Objects.equals(this.postType, other.postType)) {

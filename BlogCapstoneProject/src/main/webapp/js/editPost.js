@@ -12,6 +12,12 @@ $(document).ready(function () {
        
        editPost('draft');
     });
+    
+    $('#approval').click(function () {
+        event.preventDefault();
+        
+        editPost('pending');
+    });
 
     function editPost(status) {
         var tinymce_editor_id = tinymce.editors[0].id;
